@@ -1,0 +1,862 @@
+<!doctype html>
+<!--
+  SynthVault - Login page (standalone, self-contained preview).
+  Double-click this file to open it offline in any browser. There are no CDNs,
+  no external CSS/JS, no web fonts and no image files: every style lives in the
+  <style> block below, every behaviour in the <script> block at the end, and
+  every icon is inline SVG.
+
+  This is a static preview of the React app's /login screen
+  (frontend/src/pages/LoginPage.jsx). It validates input and shows honest
+  notices - it never fakes a successful sign-in and never creates a fake user
+  or session.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sign in - SynthVault</title>
+<meta name="description" content="Sign in to SynthVault, the privacy-preserving synthetic data platform.">
+<style>
+/* ============================================================
+   Design tokens - matches frontend/tailwind.config.js exactly:
+   indigo brand palette + Tailwind slate grays, system-ui font.
+   ============================================================ */
+:root {
+  --brand-50: #eef2ff;  --brand-100: #e0e7ff; --brand-200: #c7d2fe;
+  --brand-500: #6366f1; --brand-600: #4f46e5; --brand-700: #4338ca;
+  --brand-800: #3730a3; --brand-900: #312e81;
+  --slate-50: #f8fafc;  --slate-100: #f1f5f9; --slate-200: #e2e8f0;
+  --slate-300: #cbd5e1; --slate-400: #94a3b8; --slate-500: #64748b;
+  --slate-600: #475569; --slate-700: #334155; --slate-800: #1e293b;
+  --slate-900: #0f172a;
+  --red-50: #fef2f2; --red-300: #fca5a5; --red-400: #f87171;
+  --red-700: #b91c1c; --red-800: #991b1b;
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto,
+               'Helvetica Neue', Arial, sans-serif;
+}
+
+/* ---- tiny reset ---- */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--slate-50);
+  color: var(--slate-800);
+  font-family: var(--font-sans);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, p { margin: 0; }
+svg { display: block; }
+button { font: inherit; color: inherit; }
+[hidden] { display: none !important; }
+
+/* Visible focus ring for every interactive element (keyboard access). */
+a:focus-visible, button:focus-visible, input:focus-visible {
+  outline: 2px solid var(--brand-600);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* ============================================================
+   Layout: two zones on desktop (brand panel + login zone),
+   single centered column on mobile.
+   ============================================================ */
+.sv-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+/* Left brand panel - desktop only (matches the React app). */
+.sv-panel { display: none; }
+
+/* Right zone: header + centered card + footer. */
+.sv-zone {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.sv-header {
+  background: #fff;
+  border-bottom: 1px solid var(--slate-200);
+}
+
+.sv-shell {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.sv-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 0;
+}
+
+.sv-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+}
+
+.sv-logo-mark {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.5rem;
+  background: var(--brand-700);
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.sv-logo-name {
+  font-size: 1.125rem;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  color: var(--slate-900);
+}
+
+.sv-main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 0;
+}
+
+/* Mobile: card width = calc(100% - 32px). Tablet+: 440px. */
+.sv-card-wrap {
+  width: 100%;
+  max-width: calc(100% - 32px);
+}
+
+/* ============================================================
+   Card + form components (mirrors .sv-card/.sv-input/... in
+   frontend/src/styles/main.css).
+   ============================================================ */
+.sv-card {
+  background: #fff;
+  border: 1px solid var(--slate-200);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.sv-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  color: var(--slate-900);
+}
+
+.sv-subtitle {
+  margin-top: 0.25rem;
+  font-size: 0.875rem;
+  color: var(--slate-600);
+}
+
+.sv-form {
+  margin-top: 1.5rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.sv-label {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--slate-700);
+}
+
+.sv-input {
+  width: 100%;
+  border: 1px solid var(--slate-300);
+  border-radius: 0.5rem;
+  background: #fff;
+  padding: 0.5rem 0.75rem;
+  font-family: inherit;
+  font-size: 0.875rem;
+  color: var(--slate-900);
+}
+
+.sv-input::placeholder { color: var(--slate-400); }
+.sv-input:focus { border-color: var(--brand-500); outline: none; }
+.sv-input:disabled { opacity: 0.6; cursor: not-allowed; }
+.sv-input--error { border-color: var(--red-400); }
+
+.sv-field-error {
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  color: var(--red-700);
+}
+
+/* Password input + show/hide button inside a relative wrapper. */
+.sv-password-wrap { position: relative; }
+.sv-input--password { padding-right: 4.5rem; }
+
+.sv-toggle {
+  position: absolute;
+  top: 50%;
+  right: 0.5rem;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  border: 0;
+  background: transparent;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--slate-500);
+  cursor: pointer;
+}
+
+.sv-toggle:hover { background: var(--slate-100); color: var(--slate-700); }
+.sv-toggle:disabled { opacity: 0.5; cursor: not-allowed; }
+.sv-toggle svg { width: 1rem; height: 1rem; }
+
+/* Utility row: Remember me + Forgot password. */
+.sv-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.sv-row--form { margin-top: -0.25rem; }
+
+.sv-remember {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--slate-700);
+  cursor: pointer;
+}
+
+.sv-remember input {
+  width: 1rem;
+  height: 1rem;
+  accent-color: var(--brand-700);
+  cursor: pointer;
+}
+
+/* Small muted link-style buttons (Forgot password / Create account).
+   They do not navigate - they open an honest notice (see script). */
+.sv-mini-link {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--slate-500);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.sv-mini-link:hover { color: var(--slate-700); }
+.sv-mini-link:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ---- buttons (mirrors .sv-btn/.sv-btn-primary/.sv-btn-ghost) ---- */
+.sv-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border: 1px solid transparent;
+  border-radius: 0.5rem;
+  padding: 0.625rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.sv-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.sv-btn--primary {
+  background: var(--brand-700);
+  color: #fff;
+  width: 100%;
+}
+
+.sv-btn--primary:hover:not(:disabled) { background: var(--brand-800); }
+.sv-btn--primary:active:not(:disabled) { background: var(--brand-900); }
+
+.sv-btn--ghost {
+  background: transparent;
+  color: var(--slate-700);
+}
+
+.sv-btn--ghost:hover { background: var(--slate-100); }
+
+.sv-spinner { width: 1rem; height: 1rem; }
+
+@keyframes sv-spin { to { transform: rotate(360deg); } }
+
+.sv-spinner { animation: sv-spin 0.8s linear infinite; }
+
+/* ============================================================
+   Alert / notice (accessible: role=alert or status + aria-live).
+   ============================================================ */
+.sv-alert {
+  margin-top: 1.25rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  border: 1px solid;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  font-size: 0.875rem;
+}
+
+.sv-alert--error {
+  border-color: var(--red-300);
+  background: var(--red-50);
+  color: var(--red-800);
+}
+
+.sv-alert--info {
+  border-color: var(--slate-300);
+  background: var(--slate-50);
+  color: var(--slate-700);
+}
+
+.sv-alert-icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-top: 0.125rem;
+  border: 1px solid currentColor;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.sv-alert-body { flex: 1; min-width: 0; }
+.sv-alert-title { font-weight: 600; }
+.sv-alert-message { margin-top: 0.125rem; overflow-wrap: break-word; }
+
+.sv-alert-dismiss {
+  margin-top: 0.75rem;
+  border: 0;
+  background: transparent;
+  padding: 0.375rem 0.75rem;
+  border-radius: 0.375rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: inherit;
+  cursor: pointer;
+}
+
+.sv-alert-dismiss:hover { background: rgb(0 0 0 / 0.06); }
+
+/* ---- secondary lines under the card ---- */
+.sv-secondary {
+  margin-top: 1.5rem;
+  text-align: center;
+  font-size: 0.875rem;
+  color: var(--slate-600);
+}
+
+.sv-secondary + .sv-secondary { margin-top: 0.75rem; }
+
+.sv-link {
+  color: var(--brand-700);
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.sv-link:hover { text-decoration: underline; text-underline-offset: 4px; }
+
+.sv-footer {
+  padding: 0 1rem 1.25rem;
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--slate-400);
+}
+
+/* ============================================================
+   Responsive breakpoints.
+   ============================================================ */
+@media (min-width: 640px) {
+  .sv-shell { padding: 0 1.5rem; }
+  .sv-card-wrap { max-width: 440px; }
+  .sv-title { font-size: 1.5rem; }
+}
+
+/* Desktop (>=1024px): show the left brand panel - two visual zones. */
+@media (min-width: 1024px) {
+  .sv-layout { flex-direction: row; }
+  .sv-shell { padding: 0 2rem; }
+
+  .sv-panel {
+    display: flex;
+    align-items: center;
+    width: 50%;
+    background: var(--brand-700);
+    padding: 3rem 4rem;
+  }
+
+  .sv-panel-inner { max-width: 28rem; }
+
+  .sv-panel-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .sv-panel-mark {
+    display: grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 0.5rem;
+    background: rgb(255 255 255 / 0.2);
+    color: #fff;
+    font-size: 1.125rem;
+    font-weight: 700;
+  }
+
+  .sv-panel-name {
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    color: #fff;
+  }
+
+  .sv-panel-title {
+    margin-top: 2rem;
+    font-size: 1.875rem;
+    line-height: 1.2;
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    color: #fff;
+  }
+
+  .sv-panel-text {
+    margin-top: 1rem;
+    font-size: 1rem;
+    line-height: 1.625;
+    color: var(--brand-100);
+  }
+}
+</style>
+</head>
+<body>
+<div class="sv-layout">
+
+  <!-- Desktop-only brand panel (left visual zone). -->
+  <aside class="sv-panel">
+    <div class="sv-panel-inner">
+      <div class="sv-panel-logo">
+        <span class="sv-panel-mark" aria-hidden="true">SV</span>
+        <span class="sv-panel-name">SynthVault</span>
+      </div>
+      <h2 class="sv-panel-title">Privacy-preserving synthetic data, ready when you are.</h2>
+      <p class="sv-panel-text">
+        Sign in to access your workspace, manage projects, upload datasets, configure
+        privacy guarantees, and generate high-fidelity synthetic data.
+      </p>
+    </div>
+  </aside>
+
+  <!-- Right zone: header, login card, footer. -->
+  <div class="sv-zone">
+
+    <header class="sv-header">
+      <div class="sv-shell sv-header-row">
+        <!-- Relative link: opens LANDING PAGE.html from the same folder when present. -->
+        <a class="sv-logo" href="LANDING%20PAGE.html" aria-label="SynthVault - back to home">
+          <span class="sv-logo-mark" aria-hidden="true">SV</span>
+          <span class="sv-logo-name">SynthVault</span>
+        </a>
+        <a class="sv-btn sv-btn--ghost" href="LANDING%20PAGE.html">Back to home</a>
+      </div>
+    </header>
+
+    <main id="main-content" class="sv-main">
+      <div class="sv-card-wrap">
+        <div class="sv-card">
+          <h1 class="sv-title">Sign in to SynthVault</h1>
+          <p class="sv-subtitle">Access your privacy-preserving synthetic data workspace.</p>
+
+          <!-- Accessible notice: filled by the script (error or info). -->
+          <div id="sv-alert" class="sv-alert sv-alert--error" role="alert" aria-live="polite" hidden>
+            <span class="sv-alert-icon" id="sv-alert-icon" aria-hidden="true">!</span>
+            <div class="sv-alert-body">
+              <p class="sv-alert-title" id="sv-alert-title"></p>
+              <p class="sv-alert-message" id="sv-alert-message"></p>
+              <button type="button" class="sv-alert-dismiss" id="sv-alert-dismiss">Dismiss</button>
+            </div>
+          </div>
+
+          <form id="sv-login-form" class="sv-form" novalidate>
+
+            <!-- Field 1: email -->
+            <div class="sv-field">
+              <label class="sv-label" for="sv-email">Email</label>
+              <input
+                class="sv-input"
+                id="sv-email"
+                name="email"
+                type="email"
+                placeholder="you@example.com"
+                autocomplete="email"
+                autofocus>
+              <p class="sv-field-error" id="sv-email-error" hidden></p>
+            </div>
+
+            <!-- Field 2: password + show/hide toggle -->
+            <div class="sv-field">
+              <div class="sv-row">
+                <label class="sv-label" for="sv-password">Password</label>
+                <button
+                  type="button"
+                  class="sv-mini-link"
+                  id="sv-forgot"
+                  title="Password recovery will be available in a future release.">
+                  Forgot password?
+                </button>
+              </div>
+              <div class="sv-password-wrap">
+                <input
+                  class="sv-input sv-input--password"
+                  id="sv-password"
+                  name="password"
+                  type="password"
+                  placeholder="Your password"
+                  autocomplete="current-password">
+                <button
+                  type="button"
+                  class="sv-toggle"
+                  id="sv-toggle"
+                  aria-label="Show password"
+                  aria-pressed="false">
+                  <!-- Eye (password visible) -->
+                  <svg id="sv-eye-open" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                       stroke-width="2" stroke-linecap="round" stroke-linejoin="round" hidden aria-hidden="true">
+                    <path d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+                    <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                  </svg>
+                  <!-- Eye off (password hidden) -->
+                  <svg id="sv-eye-closed" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                       stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M13.875 18.825A10.05 10.05 0 0 1 12 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 0 1 1.563-3.029m5.858.908a3 3 0 1 1 4.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0 1 12 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 0 1-4.132 5.411m0 0L21 21"/>
+                  </svg>
+                  <span id="sv-toggle-text">Show</span>
+                </button>
+              </div>
+              <p class="sv-field-error" id="sv-password-error" hidden></p>
+            </div>
+
+            <!-- Remember me (stores only the email, never the password). -->
+            <div class="sv-row sv-row--form">
+              <label class="sv-remember">
+                <input type="checkbox" id="sv-remember">
+                Remember me
+              </label>
+            </div>
+
+            <!-- Submit: spinner replaces the label while working. -->
+            <button type="submit" class="sv-btn sv-btn--primary" id="sv-submit">
+              <svg class="sv-spinner" id="sv-submit-spinner" viewBox="0 0 24 24" fill="none" hidden aria-hidden="true">
+                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" opacity="0.25"/>
+                <path fill="currentColor" opacity="0.75"
+                      d="M4 12a8 8 0 0 1 8-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 0 1 4 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/>
+              </svg>
+              <span id="sv-submit-label">Login</span>
+            </button>
+          </form>
+        </div>
+
+        <!-- Secondary actions (honest: no /register route exists yet). -->
+        <p class="sv-secondary">
+          Don't have an account?
+          <button type="button" class="sv-mini-link" id="sv-create-account"
+                  title="Account registration will be available in a future release.">
+            Create account
+          </button>
+        </p>
+        <p class="sv-secondary">
+          <a class="sv-link" href="LANDING%20PAGE.html">Return to the SynthVault home page</a>
+        </p>
+      </div>
+    </main>
+
+    <footer class="sv-footer">
+      <p>Demo sign-in - your credentials never leave this page. Enter any email and password to explore the dashboard offline.</p>
+    </footer>
+  </div>
+</div>
+<script>
+/* ============================================================
+   SynthVault login preview - behaviour (vanilla JS, no libraries).
+
+   Honesty rules (mirrors the project's frontend contract):
+   - credentials are validated client-side but NEVER sent anywhere,
+     and no fake session/token/user is ever created;
+   - only the (trimmed) email is remembered when "Remember me" is
+     ticked - the password is never stored, never logged;
+   - nothing is written to the console.
+   ============================================================ */
+(function () {
+  'use strict';
+
+  var REMEMBER_KEY = 'synthvault.login.email';
+  var SESSION_KEY = 'synthvault.user'; /* offline demo session - no backend required */
+
+  /* Builds the demo user object for the offline sign-in flow. */
+  function buildMockUser(email) {
+    var known = {
+      'demo@synthvault.com': 'Demo User',
+      'prathip@example.com': 'Prathip Kumar',
+      'test@example.com': 'Test User'
+    };
+    var local = String(email).split('@')[0] || 'user';
+    var derived = local.charAt(0).toUpperCase() + local.slice(1).replace(/[._-]+/g, ' ');
+    return { email: email, name: known[email] || derived, role: 'USER' };
+  }
+
+  /* Reflects the demo session in the dashboard chrome. The dashboard markup is
+     already present in this single-file build, so it can be updated immediately. */
+  function applySessionToDashboard(user) {
+    try {
+      var scope = document.getElementById('svpage-dashboard') || document;
+      var heading = scope.querySelector('.page-title');
+      if (heading && /welcome back/i.test(heading.textContent || '')) {
+        heading.textContent = 'Welcome back, ' + String(user.name || user.email).split(' ')[0];
+      }
+      var nameEl = scope.querySelector('.user-name');
+      if (nameEl) { nameEl.textContent = user.name || user.email; }
+      var emailEl = scope.querySelector('.user-email');
+      if (emailEl) { emailEl.textContent = user.email; }
+      if (user.role) {
+        var roleEl = scope.querySelector('.user-role');
+        if (roleEl) { roleEl.textContent = user.role; }
+      }
+    } catch (error) { /* cosmetic only - never break the demo */ }
+  }
+
+  /* ---- element references ---- */
+  var form = document.getElementById('sv-login-form');
+  var emailInput = document.getElementById('sv-email');
+  var passwordInput = document.getElementById('sv-password');
+  var emailError = document.getElementById('sv-email-error');
+  var passwordError = document.getElementById('sv-password-error');
+  var toggleBtn = document.getElementById('sv-toggle');
+  var eyeOpen = document.getElementById('sv-eye-open');
+  var eyeClosed = document.getElementById('sv-eye-closed');
+  var toggleText = document.getElementById('sv-toggle-text');
+  var rememberBox = document.getElementById('sv-remember');
+  var submitBtn = document.getElementById('sv-submit');
+  var submitLabel = document.getElementById('sv-submit-label');
+  var submitSpinner = document.getElementById('sv-submit-spinner');
+  var alertBox = document.getElementById('sv-alert');
+  var alertIcon = document.getElementById('sv-alert-icon');
+  var alertTitle = document.getElementById('sv-alert-title');
+  var alertMessage = document.getElementById('sv-alert-message');
+  var alertDismiss = document.getElementById('sv-alert-dismiss');
+  var forgotBtn = document.getElementById('sv-forgot');
+  var createBtn = document.getElementById('sv-create-account');
+
+  /* ---- prefill a remembered email (localStorage is optional) ---- */
+  try {
+    var savedEmail = window.localStorage.getItem(REMEMBER_KEY);
+    if (savedEmail) {
+      emailInput.value = savedEmail;
+      rememberBox.checked = true;
+    }
+  } catch (storageError) {
+    /* Storage can be blocked (private mode): the page still works. */
+  }
+
+  /* ---- alert helpers: tone 'error' (role=alert) or 'info' (status) ---- */
+  function showAlert(tone, title, message) {
+    var isError = tone === 'error';
+    alertBox.className = 'sv-alert ' + (isError ? 'sv-alert--error' : 'sv-alert--info');
+    alertBox.setAttribute('role', isError ? 'alert' : 'status');
+    alertIcon.textContent = isError ? '!' : 'i';
+    alertTitle.textContent = title;
+    alertMessage.textContent = message;
+    alertBox.hidden = false;
+  }
+
+  function hideAlert() {
+    alertBox.hidden = true;
+  }
+
+  alertDismiss.addEventListener('click', hideAlert);
+
+  /* Escape dismisses the notice as a keyboard convenience. */
+  document.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape' && !alertBox.hidden) {
+      hideAlert();
+    }
+  });
+
+  /* ---- show / hide password ---- */
+  toggleBtn.addEventListener('click', function () {
+    var visible = passwordInput.type === 'password';
+    passwordInput.type = visible ? 'text' : 'password';
+    eyeOpen.hidden = !visible;
+    eyeClosed.hidden = visible;
+    toggleText.textContent = visible ? 'Hide' : 'Show';
+    toggleBtn.setAttribute('aria-pressed', String(visible));
+    toggleBtn.setAttribute('aria-label', visible ? 'Hide password' : 'Show password');
+  });
+
+  /* ---- field validation ---- */
+  function setFieldError(input, errorElement, message) {
+    if (message) {
+      errorElement.textContent = message;
+      errorElement.hidden = false;
+      input.classList.add('sv-input--error');
+      input.setAttribute('aria-invalid', 'true');
+      input.setAttribute('aria-describedby', errorElement.id);
+    } else {
+      errorElement.hidden = true;
+      input.classList.remove('sv-input--error');
+      input.removeAttribute('aria-invalid');
+      input.removeAttribute('aria-describedby');
+    }
+  }
+
+  function validate() {
+    var email = emailInput.value.trim();
+    var password = passwordInput.value;
+    var emailMessage = '';
+    var passwordMessage = '';
+
+    if (!email) {
+      emailMessage = 'Enter the email address you registered with.';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      emailMessage = 'Enter a valid email address, for example you@example.com.';
+    }
+    if (!password) {
+      passwordMessage = 'Enter your password.';
+    }
+
+    setFieldError(emailInput, emailError, emailMessage);
+    setFieldError(passwordInput, passwordError, passwordMessage);
+    return !emailMessage && !passwordMessage;
+  }
+
+  /* Clear the field error as soon as the user edits the value again. */
+  emailInput.addEventListener('input', function () {
+    setFieldError(emailInput, emailError, '');
+    hideAlert();
+  });
+
+  passwordInput.addEventListener('input', function () {
+    setFieldError(passwordInput, passwordError, '');
+    hideAlert();
+  });
+
+  /* ---- busy state: disables inputs, swaps the button label ---- */
+  function setBusy(busy) {
+    emailInput.disabled = busy;
+    passwordInput.disabled = busy;
+    toggleBtn.disabled = busy;
+    rememberBox.disabled = busy;
+    forgotBtn.disabled = busy;
+    createBtn.disabled = busy;
+    submitBtn.disabled = busy;
+    submitSpinner.hidden = !busy;
+    submitLabel.textContent = busy ? 'Signing in\u2026' : 'Login';
+    submitBtn.setAttribute('aria-busy', String(busy));
+  }
+
+  /* ---- submit: validate, then show the honest preview notice ----
+     This file is opened from disk (file://), so there is no backend to
+     talk to and CORS would block any request. Instead of faking a
+     successful sign-in, the page says exactly what happens and how to
+     run the real app. */
+  form.addEventListener('submit', function (event) {
+    event.preventDefault();
+    hideAlert();
+
+    if (!validate()) {
+      var firstInvalid = emailError.hidden ? passwordInput : emailInput;
+      firstInvalid.focus();
+      return;
+    }
+
+    var email = emailInput.value.trim(); /* trimmed; password is NOT trimmed */
+
+    try {
+      if (rememberBox.checked) {
+        window.localStorage.setItem(REMEMBER_KEY, email);
+      } else {
+        window.localStorage.removeItem(REMEMBER_KEY);
+      }
+    } catch (storageError) {
+      /* Ignore storage failures - the preview keeps working. */
+    }
+
+        setBusy(true);
+
+    /* ---- offline demo sign-in: mock session, then SPA navigation ----
+       (replaces the previous "Static preview" notice - no backend required) */
+    var mockUser = buildMockUser(email);
+    try {
+      window.sessionStorage.setItem(SESSION_KEY, JSON.stringify(mockUser));
+      window.localStorage.setItem(SESSION_KEY, JSON.stringify(mockUser));
+    } catch (storageError) {
+      /* Storage can be blocked (private mode): the demo sign-in still continues. */
+    }
+    window.SV_MOCK_SESSION = mockUser; /* global handle for debugging / other pages */
+    applySessionToDashboard(mockUser);
+
+    window.setTimeout(function () {
+      setBusy(false);
+      showAlert(
+        'info',
+        'Signed in (demo)',
+        'Welcome, ' + mockUser.name + '. You are signed in as ' + mockUser.email +
+          ' - opening your dashboard...'
+      );
+      window.location.hash = '#/dashboard';
+    }, 400);
+  });
+
+  /* ---- honest notices for features that have no route yet ---- */
+  forgotBtn.addEventListener('click', function () {
+    showAlert(
+      'info',
+      'Password recovery',
+      'Password recovery is not part of this static preview and the app does not ' +
+        'ship a /forgot-password route yet. It will open here once that route exists.'
+    );
+  });
+
+  createBtn.addEventListener('click', function () {
+    showAlert(
+      'info',
+      'Account registration',
+      'Registration is not part of this static preview. In the app you can create ' +
+        'an account through the backend\u2019s POST /api/auth/register endpoint.'
+    );
+  });
+})();
+</script>
+</body>
+</html>

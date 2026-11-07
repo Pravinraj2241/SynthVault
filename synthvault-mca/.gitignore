@@ -1,0 +1,10 @@
+target/
+uploads/
+synthetic/
+.idea/
+*.iml
+.vscode/
+.classpath
+.project
+.settings/
+*.log

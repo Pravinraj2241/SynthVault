@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Privacy Analysis - SynthVault</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #f8fafc; color: #1e293b; font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: inherit; } button { font-family: inherit; }
+  .sv-btn { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; border-radius: .5rem; padding: .625rem 1rem; font-size: .875rem; font-weight: 600; border: 1px solid transparent; cursor: pointer; transition: background-color .15s, color .15s; text-decoration: none; }
+  .sv-btn-primary { background: #4338ca; color: #fff; } .sv-btn-primary:hover { background: #312e81; }
+  .sv-btn-secondary { border-color: #cbd5e1; background: #fff; color: #334155; } .sv-btn-secondary:hover { background: #f1f5f9; }
+  .sv-btn:focus-visible, a:focus-visible { outline: 2px solid #4f46e5; outline-offset: 2px; border-radius: .25rem; }
+  .sv-card { background: #fff; border: 1px solid #e2e8f0; border-radius: .75rem; padding: 1.5rem; box-shadow: 0 1px 2px rgba(15,23,42,.05); }
+  .sv-link { color: #4338ca; font-weight: 500; text-decoration: none; } .sv-link:hover { text-decoration: underline; }
+  .banner { background: #fff7ed; border-bottom: 1px solid #fdba74; color: #9a3412; padding: .55rem 1rem; font-size: .75rem; line-height: 1.45; text-align: center; }
+  .shell { max-width: 1200px; margin: 0 auto; padding: 1.5rem 1rem 3rem; display: flex; gap: 2rem; }
+  .sidebar { display: none; width: 15rem; flex: none; } .main { flex: 1; min-width: 0; }
+  .brand { display: flex; align-items: center; gap: .5rem; text-decoration: none; }
+  .brand-mark { display: flex; height: 2rem; width: 2rem; align-items: center; justify-content: center; border-radius: .5rem; background: #4338ca; color: #fff; font-size: .8125rem; font-weight: 700; }
+  .brand-name { font-size: 1.125rem; font-weight: 600; letter-spacing: -.01em; }
+  .topbar { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #e2e8f0; background: #fff; padding: .75rem 1rem; margin: -1.5rem -1rem 1.5rem; }
+  .nav ul { list-style: none; margin: 1rem 0; padding: 0; } .nav li + li { margin-top: .25rem; }
+  .nav a { display: block; border-radius: .5rem; padding: .5rem .75rem; font-size: .875rem; font-weight: 500; color: #334155; text-decoration: none; }
+  .nav a:hover { background: #f1f5f9; color: #0f172a; } .nav a[aria-current="page"] { background: #eef2ff; color: #3730a3; }
+  .user-block { border: 1px solid #e2e8f0; background: #f8fafc; border-radius: .5rem; padding: .75rem; }
+  .user-name { margin: 0; font-size: .875rem; font-weight: 600; color: #0f172a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .user-email { margin: .125rem 0 0; font-size: .75rem; color: #64748b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .user-role { display: inline-flex; margin-top: .375rem; border: 1px solid #cbd5e1; background: #fff; border-radius: 9999px; padding: .1rem .5rem; font-size: .7rem; font-weight: 500; color: #475569; }
+  .page-head { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: 1.5rem; }
+  .page-title { margin: 0; font-size: 1.5rem; font-weight: 600; letter-spacing: -.01em; color: #0f172a; }
+  .page-sub { margin: .25rem 0 0; font-size: .875rem; color: #475569; }
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+  .menu-btn { display: inline-flex; } .mobile-nav { display: none; border-top: 1px solid #e2e8f0; background: #fff; padding: .75rem 1rem; margin: -1.5rem -1rem 1.5rem; }
+  .mobile-nav.open { display: block; }
+  @media (min-width: 1024px) { .sidebar { display: block; } .topbar { display: none; } .mobile-nav { display: none !important; } .shell { padding: 1.5rem 2rem 3rem; } }
+  .breadcrumb { margin-bottom: 1rem; font-size: .875rem; color: #64748b; }
+  .breadcrumb ol { list-style: none; display: flex; flex-wrap: wrap; align-items: center; gap: .25rem; margin: 0; padding: 0; }
+  .breadcrumb li { display: flex; align-items: center; gap: .25rem; }
+  .breadcrumb .sep { color: #94a3b8; }
+  .breadcrumb .current { font-weight: 600; color: #0f172a; }
+  .grid-2 { display: grid; gap: 1.5rem; align-items: start; }
+  @media (min-width: 1024px) { .grid-2 { grid-template-columns: repeat(2, 1fr); } }
+  .stack { display: grid; gap: 1.5rem; }
+  .section-title { margin: 0; font-size: 1rem; font-weight: 600; color: #0f172a; }
+  .summary-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: .75rem; margin-top: .75rem; font-size: .875rem; }
+  .summary-grid > div { border: 1px solid #e2e8f0; border-radius: .5rem; padding: .75rem; }
+  .summary-grid dt { font-size: .75rem; color: #64748b; }
+  .summary-grid dd { margin: .15rem 0 0; font-weight: 600; color: #0f172a; }
+  .metric-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: .75rem; margin-top: .75rem; font-size: .875rem; }
+  .metric-grid > div { border: 1px solid #e2e8f0; border-radius: .5rem; padding: .75rem; }
+  .metric-grid dt { font-size: .75rem; color: #64748b; }
+  .metric-grid dd { margin: .15rem 0 0; font-size: 1.125rem; font-weight: 600; color: #0f172a; }
+  .metric-unavailable { font-size: .875rem; font-weight: 500; color: #94a3b8; }
+  .metric-note { font-size: .7rem; color: #94a3b8; margin: .15rem 0 0; }
+  .gauge-wrap { display: flex; flex-direction: column; align-items: center; margin-top: 1rem; }
+  .gauge-wrap svg { width: 100%; max-width: 220px; }
+  .risk-badge { display: inline-flex; align-items: center; border-radius: 9999px; border: 1px solid; padding: .25rem .75rem; font-size: .875rem; font-weight: 600; margin-top: .25rem; }
+  .badge-high { border-color: #fdba74; background: #fff7ed; color: #9a3412; }
+  .badge-pii { display: inline-flex; border-radius: 9999px; border: 1px solid #fcd34d; background: #fffbeb; padding: .125rem .5rem; font-size: .75rem; font-weight: 600; color: #78350f; }
+  .badge-none { display: inline-flex; border-radius: 9999px; border: 1px solid #e2e8f0; background: #fff; padding: .125rem .5rem; font-size: .75rem; color: #94a3b8; }
+  table { border-collapse: collapse; width: 100%; }
+  th, td { text-align: left; padding: .5rem .75rem .5rem 0; vertical-align: top; }
+  thead th { border-bottom: 1px solid #e2e8f0; font-size: .75rem; text-transform: uppercase; letter-spacing: .05em; color: #64748b; font-weight: 600; white-space: nowrap; }
+  tbody tr { border-bottom: 1px solid #f1f5f9; }
+  .table-scroll { overflow-x: auto; margin-top: .75rem; }
+  .empty-box { margin-top: .75rem; border: 1px dashed #cbd5e1; border-radius: .5rem; padding: 1rem; text-align: center; font-size: .875rem; color: #475569; }
+  .details-text { margin: .5rem 0 0; font-size: .875rem; color: #475569; overflow-wrap: break-word; }
+  .footnote { margin: 1rem 0 0; font-size: .75rem; color: #94a3b8; }
+</style>
+
+</head>
+<body>
+<div class="banner">
+  <strong>STATIC OFFLINE PREVIEW — PAGE 6 (PRIVACY ANALYSIS)</strong> — the score, risk level and column data in production come <strong>live from the backend</strong>; the frontend never calculates privacy figures. Values shown are samples. k-Anonymity, l-Diversity and Re-identification Risk are <strong>genuinely not returned by this backend</strong>, so their cards honestly show "Not available" — exactly as in the production app.
+</div>
+
+<header class="topbar">
+  <a class="brand" href="Dashboard page .html"><span class="brand-mark">SV</span><span class="brand-name">SynthVault</span></a>
+  <button type="button" id="menuBtn" class="sv-btn sv-btn-secondary menu-btn" aria-expanded="false" aria-controls="mobileNav">
+    <span class="sr-only">Toggle navigation menu</span>
+    <svg viewBox="0 0 20 20" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M3 5h14v2H3V5Zm0 4h14v2H3V9Zm0 4h14v2H3v-2Z"/></svg>
+  </button>
+</header>
+<nav id="mobileNav" class="mobile-nav" aria-label="Application">
+  <ul class="nav" style="margin:0">
+    <li><a href="Dashboard page .html">Dashboard</a></li>
+    <li><a href="Projects Page .html">Projects</a></li>
+  </ul>
+</nav>
+
+<div class="shell">
+  <aside class="sidebar">
+    <div style="position:sticky;top:1.5rem">
+      <a class="brand" href="Dashboard page .html"><span class="brand-mark">SV</span><span class="brand-name">SynthVault</span></a>
+      <nav class="nav" aria-label="Application">
+        <ul>
+          <li><a href="Dashboard page .html">Dashboard</a></li>
+          <li><a href="Projects Page .html">Projects</a></li>
+        </ul>
+      </nav>
+      <div class="user-block">
+        <p class="user-name">Prathip Kumar</p>
+        <p class="user-email">prathip@example.com</p>
+        <span class="user-role">USER</span>
+        <button type="button" class="sv-btn sv-btn-secondary" style="margin-top:.75rem;width:100%;padding:.5rem;font-size:.75rem">Sign out</button>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main" id="main-content">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <ol>
+        <li><a class="sv-link" href="Projects Page .html">Projects</a><span class="sep" aria-hidden="true">/</span></li>
+        <li><span>Dataset</span><span class="sep" aria-hidden="true">/</span></li>
+        <li><span class="current" aria-current="page">Privacy Analysis</span></li>
+      </ol>
+    </nav>
+
+    <div class="page-head">
+      <div>
+        <h1 class="page-title">Privacy Analysis</h1>
+        <p class="page-sub">Review the privacy risk detected in your dataset.</p>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="stack">
+        <section class="sv-card" aria-labelledby="summary-heading">
+          <h2 class="section-title" id="summary-heading">Dataset summary</h2>
+          <dl class="summary-grid">
+            <div><dt>Dataset</dt><dd style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">patients.csv</dd></div>
+            <div><dt>Status</dt><dd>PROCESSED</dd></div>
+            <div><dt>Rows</dt><dd style="font-size:1.125rem">5,000</dd></div>
+            <div><dt>Columns</dt><dd style="font-size:1.125rem">8</dd></div>
+          </dl>
+        </section>
+
+        <section class="sv-card" aria-labelledby="score-heading">
+          <h2 class="section-title" id="score-heading">Privacy Score</h2>
+          <div class="gauge-wrap">
+            <svg viewBox="0 0 200 116" role="img" aria-label="Privacy score: 62 out of 100.">
+              <title>Privacy score: 62 out of 100.</title>
+              <path d="M 14 104 A 86 86 0 0 1 186 104" fill="none" stroke="#e2e8f0" stroke-width="14" stroke-linecap="round"/>
+              <path d="M 14 104 A 86 86 0 0 1 186 104" fill="none" stroke="#f97316" stroke-width="14" stroke-linecap="round" pathLength="100" stroke-dasharray="62 100"/>
+              <text x="100" y="92" text-anchor="middle" font-size="34" font-weight="700" fill="#0f172a">62</text>
+              <text x="100" y="112" text-anchor="middle" font-size="11" fill="#64748b">62/100</text>
+            </svg>
+            <span class="risk-badge badge-high">HIGH</span>
+          </div>
+          <p style="margin:.75rem 0 0;text-align:center;font-size:.75rem;color:#64748b">Returned directly by the backend (risk score 0–100; lower is safer).</p>
+        </section>
+
+        <section class="sv-card" aria-labelledby="metrics-heading">
+          <h2 class="section-title" id="metrics-heading">Metrics</h2>
+          <dl class="metric-grid">
+            <div><dt>Overall Score</dt><dd>62/100</dd><p class="metric-note">Backend risk score</p></div>
+            <div><dt>k-Anonymity</dt><dd class="metric-unavailable">Not available</dd><p class="metric-note">Not returned by this backend</p></div>
+            <div><dt>l-Diversity</dt><dd class="metric-unavailable">Not available</dd><p class="metric-note">Not returned by this backend</p></div>
+            <div><dt>Re-identification Risk</dt><dd class="metric-unavailable">Not available</dd><p class="metric-note">Not returned by this backend</p></div>
+          </dl>
+          <p class="footnote">Metrics without backend values are shown as unavailable — the frontend never calculates privacy figures.</p>
+        </section>
+      </div>
+
+      <div class="stack">
+        <section class="sv-card" aria-labelledby="details-heading">
+          <h2 class="section-title" id="details-heading">Details</h2>
+          <p class="details-text">3 of 8 columns carry personal data (2 EMAIL, 1 PHONE). Weighted risk is driven by direct identifiers and the re-identification potential of the quasi-identifier combination (admitted_on + bill_amount).</p>
+        </section>
+
+        <section class="sv-card" aria-labelledby="recommendations-heading">
+          <h2 class="section-title" id="recommendations-heading">Recommendations</h2>
+          <p class="empty-box">No recommendations were returned by the backend for this dataset.</p>
+        </section>
+
+        <section class="sv-card" aria-labelledby="columns-heading">
+          <h2 class="section-title" id="columns-heading">Column Risk Analysis</h2>
+          <div class="table-scroll">
+            <table style="min-width:560px">
+              <caption class="sr-only">Column types and detected personal data</caption>
+              <thead>
+                <tr><th>Column</th><th>Data Type</th><th>PII Type</th><th>Distinct Values</th><th>Min</th><th>Max</th></tr>
+              </thead>
+              <tbody>
+                <tr><td style="font-weight:500;color:#0f172a">patient_id</td><td>INTEGER</td><td><span class="badge-none">none</span></td><td>5,000</td><td>1</td><td>5000</td></tr>
+                <tr style="background:#fffbeb80"><td style="font-weight:500;color:#0f172a">email</td><td>STRING</td><td><span class="badge-pii">EMAIL</span></td><td>4,980</td><td>aarti.b@example.com</td><td>vikram.r@example.com</td></tr>
+                <tr style="background:#fffbeb80"><td style="font-weight:500;color:#0f172a">phone</td><td>STRING</td><td><span class="badge-pii">PHONE</span></td><td>4,912</td><td>+919600000001</td><td>+919999999999</td></tr>
+                <tr><td style="font-weight:500;color:#0f172a">admitted_on</td><td>DATE</td><td><span class="badge-none">none</span></td><td>365</td><td>2024-01-01</td><td>2024-12-31</td></tr>
+                <tr><td style="font-weight:500;color:#0f172a">bill_amount</td><td>DECIMAL</td><td><span class="badge-none">none</span></td><td>3,402</td><td>450.00</td><td>98,700.50</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="footnote">3 columns flagged as carrying personal data. Per-column risk, confidence and recommendation fields are not returned by this backend.</p>
+        </section>
+
+        <section class="sv-card" aria-labelledby="next-heading">
+          <h2 class="section-title" id="next-heading">Next step</h2>
+          <a class="sv-btn sv-btn-primary" style="margin-top:.75rem;width:100%" href="Generate + Results Page.Html">Generate Synthetic Data</a>
+        </section>
+      </div>
+
+    </div>
+
+    <p class="footnote">Static offline preview generated for visual verification · SynthVault MCA Project</p>
+  </main>
+</div>
+<script>
+(function () {
+  /* Mobile nav toggle (Escape closes) — the only JS this page needs. */
+  var menuBtn = document.getElementById('menuBtn'), mobileNav = document.getElementById('mobileNav');
+  menuBtn.addEventListener('click', function () {
+    var open = mobileNav.classList.toggle('open');
+    menuBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') { mobileNav.classList.remove('open'); }
+  });
+})();
+</script>
+
+</body>
+</html>
+

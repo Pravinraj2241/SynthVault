@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Upload Dataset - SynthVault</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #f8fafc; color: #1e293b; font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: inherit; } button { font-family: inherit; }
+  .sv-btn { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; border-radius: .5rem; padding: .625rem 1rem; font-size: .875rem; font-weight: 600; border: 1px solid transparent; cursor: pointer; transition: background-color .15s, color .15s; text-decoration: none; }
+  .sv-btn-primary { background: #4338ca; color: #fff; } .sv-btn-primary:hover { background: #312e81; }
+  .sv-btn-secondary { border-color: #cbd5e1; background: #fff; color: #334155; } .sv-btn-secondary:hover { background: #f1f5f9; }
+  .sv-btn:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid #4f46e5; outline-offset: 2px; border-radius: .25rem; }
+  .sv-card { background: #fff; border: 1px solid #e2e8f0; border-radius: .75rem; padding: 1.5rem; box-shadow: 0 1px 2px rgba(15,23,42,.05); }
+  .sv-link { color: #4338ca; font-weight: 500; text-decoration: none; } .sv-link:hover { text-decoration: underline; }
+  .banner { background: #fff7ed; border-bottom: 1px solid #fdba74; color: #9a3412; padding: .55rem 1rem; font-size: .75rem; line-height: 1.45; text-align: center; }
+  .shell { max-width: 1200px; margin: 0 auto; padding: 1.5rem 1rem 3rem; display: flex; gap: 2rem; }
+  .sidebar { display: none; width: 15rem; flex: none; } .main { flex: 1; min-width: 0; }
+  .brand { display: flex; align-items: center; gap: .5rem; text-decoration: none; }
+  .brand-mark { display: flex; height: 2rem; width: 2rem; align-items: center; justify-content: center; border-radius: .5rem; background: #4338ca; color: #fff; font-size: .8125rem; font-weight: 700; }
+  .brand-name { font-size: 1.125rem; font-weight: 600; letter-spacing: -.01em; }
+  .topbar { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #e2e8f0; background: #fff; padding: .75rem 1rem; margin: -1.5rem -1rem 1.5rem; }
+  .nav ul { list-style: none; margin: 1rem 0; padding: 0; } .nav li + li { margin-top: .25rem; }
+  .nav a { display: block; border-radius: .5rem; padding: .5rem .75rem; font-size: .875rem; font-weight: 500; color: #334155; text-decoration: none; }
+  .nav a:hover { background: #f1f5f9; color: #0f172a; } .nav a[aria-current="page"] { background: #eef2ff; color: #3730a3; }
+  .user-block { border: 1px solid #e2e8f0; background: #f8fafc; border-radius: .5rem; padding: .75rem; }
+  .user-name { margin: 0; font-size: .875rem; font-weight: 600; color: #0f172a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .user-email { margin: .125rem 0 0; font-size: .75rem; color: #64748b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .user-role { display: inline-flex; margin-top: .375rem; border: 1px solid #cbd5e1; background: #fff; border-radius: 9999px; padding: .1rem .5rem; font-size: .7rem; font-weight: 500; color: #475569; }
+  .page-head { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: 1.5rem; }
+  .page-title { margin: 0; font-size: 1.5rem; font-weight: 600; letter-spacing: -.01em; color: #0f172a; }
+  .page-sub { margin: .25rem 0 0; font-size: .875rem; color: #475569; }
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+  .menu-btn { display: inline-flex; } .mobile-nav { display: none; border-top: 1px solid #e2e8f0; background: #fff; padding: .75rem 1rem; margin: -1.5rem -1rem 1.5rem; }
+  .mobile-nav.open { display: block; }
+  @media (min-width: 1024px) { .sidebar { display: block; } .topbar { display: none; } .mobile-nav { display: none !important; } .shell { padding: 1.5rem 2rem 3rem; } }
+  .breadcrumb { margin-bottom: 1rem; font-size: .875rem; color: #64748b; }
+  .breadcrumb ol { list-style: none; display: flex; flex-wrap: wrap; align-items: center; gap: .25rem; margin: 0; padding: 0; }
+  .breadcrumb li { display: flex; align-items: center; gap: .25rem; }
+  .breadcrumb .sep { color: #94a3b8; }
+  .breadcrumb .current { font-weight: 600; color: #0f172a; }
+  .grid-2 { display: grid; gap: 1.5rem; align-items: start; }
+  @media (min-width: 1024px) { .grid-2 { grid-template-columns: repeat(2, 1fr); } }
+  .dropzone { margin-top: 1rem; border: 2px dashed #94a3b8; border-radius: .75rem; background: #f8fafc; padding: 2rem; text-align: center; transition: border-color .15s, background-color .15s; }
+  .dropzone.active { border-color: #4f46e5; background: #eef2ff; }
+  .dropzone p { margin: 0; }
+  .dropzone .or { margin-top: .25rem; font-size: .75rem; color: #64748b; }
+  .dropzone svg { display: block; margin: 0 auto; width: 2.5rem; height: 2.5rem; color: #94a3b8; }
+  .file-card { margin-top: 1rem; border: 1px solid #e2e8f0; border-radius: .5rem; padding: .75rem; }
+  .file-name { margin: 0; font-size: .875rem; font-weight: 500; color: #0f172a; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .file-meta { margin: .1rem 0 0; font-size: .75rem; color: #64748b; }
+  .progress { margin-top: .75rem; }
+  .progress-track { height: .5rem; width: 100%; overflow: hidden; border-radius: .25rem; background: #f1f5f9; }
+  .progress-fill { height: 100%; border-radius: .25rem; background: #4f46e5; }
+  .progress-label { margin: .25rem 0 0; font-size: .75rem; color: #64748b; }
+  .alert { display: flex; gap: .75rem; border: 1px solid; border-radius: .5rem; padding: 1rem; font-size: .875rem; }
+  .alert .ico { display: flex; height: 1.25rem; width: 1.25rem; flex: none; align-items: center; justify-content: center; border-radius: 9999px; border: 1px solid currentColor; font-size: .7rem; font-weight: 700; margin-top: .1rem; }
+  .alert-success { border-color: #6ee7b7; background: #ecfdf5; color: #065f46; }
+  .alert-warning { border-color: #fcd34d; background: #fffbeb; color: #92400e; }
+  .alert-info { border-color: #cbd5e1; background: #f8fafc; color: #334155; }
+  .alert p { margin: 0; }
+  .alerts { margin-top: 1rem; }
+  .alerts > * + * { margin-top: .75rem; }
+  .badge-pii { display: inline-flex; border-radius: 9999px; border: 1px solid #fcd34d; background: #fffbeb; padding: .125rem .5rem; font-size: .75rem; font-weight: 600; color: #78350f; }
+  .badge-none { display: inline-flex; border-radius: 9999px; border: 1px solid #e2e8f0; background: #fff; padding: .125rem .5rem; font-size: .75rem; color: #94a3b8; }
+  table { border-collapse: collapse; width: 100%; }
+  th, td { text-align: left; padding: .5rem .75rem .5rem 0; vertical-align: top; }
+  thead th { border-bottom: 1px solid #e2e8f0; font-size: .75rem; text-transform: uppercase; letter-spacing: .05em; color: #64748b; font-weight: 600; white-space: nowrap; }
+  tbody tr { border-bottom: 1px solid #f1f5f9; }
+  .table-scroll { overflow-x: auto; margin-top: .75rem; }
+  .section-title { margin: 0; font-size: 1rem; font-weight: 600; color: #0f172a; }
+  .section-note { margin: .15rem 0 0; font-size: .75rem; color: #64748b; }
+  .stack { display: grid; gap: 1.5rem; }
+  .footnote { margin: 1rem 0 0; font-size: .75rem; color: #94a3b8; }
+</style>
+
+</head>
+<body>
+<div class="banner">
+  <strong>STATIC OFFLINE PREVIEW — PAGE 5 (DATASET UPLOAD + SCHEMA)</strong> — File selection, native drag &amp; drop, file validation and Remove are <strong>real and fully offline</strong>. The upload itself needs the running backend (POST /api/projects/{id}/datasets, multipart field "file") — clicking Upload here shows an honest notice instead of faking progress. Schema and preview values are samples.
+</div>
+
+<header class="topbar">
+  <a class="brand" href="Dashboard page .html"><span class="brand-mark">SV</span><span class="brand-name">SynthVault</span></a>
+  <button type="button" id="menuBtn" class="sv-btn sv-btn-secondary menu-btn" aria-expanded="false" aria-controls="mobileNav">
+    <span class="sr-only">Toggle navigation menu</span>
+    <svg viewBox="0 0 20 20" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M3 5h14v2H3V5Zm0 4h14v2H3V9Zm0 4h14v2H3v-2Z"/></svg>
+  </button>
+</header>
+<nav id="mobileNav" class="mobile-nav" aria-label="Application">
+  <ul class="nav" style="margin:0">
+    <li><a href="Dashboard page .html">Dashboard</a></li>
+    <li><a href="Projects Page .html">Projects</a></li>
+  </ul>
+</nav>
+
+<div class="shell">
+  <aside class="sidebar">
+    <div style="position:sticky;top:1.5rem">
+      <a class="brand" href="Dashboard page .html"><span class="brand-mark">SV</span><span class="brand-name">SynthVault</span></a>
+      <nav class="nav" aria-label="Application">
+        <ul>
+          <li><a href="Dashboard page .html">Dashboard</a></li>
+          <li><a href="Projects Page .html">Projects</a></li>
+        </ul>
+      </nav>
+      <div class="user-block">
+        <p class="user-name">Prathip Kumar</p>
+        <p class="user-email">prathip@example.com</p>
+        <span class="user-role">USER</span>
+        <button type="button" class="sv-btn sv-btn-secondary" style="margin-top:.75rem;width:100%;padding:.5rem;font-size:.75rem">Sign out</button>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main" id="main-content">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <ol>
+        <li><a class="sv-link" href="Projects Page .html">Projects</a><span class="sep" aria-hidden="true">/</span></li>
+        <li><span>Hospital Records Project</span><span class="sep" aria-hidden="true">/</span></li>
+        <li><span class="current" aria-current="page">Upload Dataset</span></li>
+      </ol>
+    </nav>
+
+    <div class="page-head">
+      <div>
+        <h1 class="page-title">Upload Dataset</h1>
+        <p class="page-sub">Upload a dataset to detect its schema and identify sensitive fields.</p>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <section class="sv-card" aria-labelledby="upload-heading">
+        <h2 class="section-title" id="upload-heading">Upload Dataset</h2>
+        <p class="section-note">Supported format: CSV (.csv), maximum 5 MB. JSON is not accepted by this backend.</p>
+
+        <div id="dropzone" class="dropzone">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0 3 3m-3-3-3 3M6.75 19.5a4.5 4.5 0 0 1-1.41-8.775 5.25 5.25 0 0 1 10.233-2.33 3 3 0 0 1 3.758 3.848A3.752 3.752 0 0 1 18 19.5H6.75Z"/></svg>
+          <p style="margin-top:.75rem;font-size:.875rem;font-weight:500;color:#0f172a">Drag and drop your dataset here</p>
+          <p class="or">or</p>
+          <button type="button" id="browseBtn" class="sv-btn sv-btn-secondary" style="margin-top:.75rem">Choose File</button>
+          <label for="fileInput" class="sr-only">Dataset file to upload</label>
+          <input id="fileInput" type="file" accept=".csv,text/csv" class="sr-only" />
+        </div>
+
+        <div id="fileCard" class="file-card" style="display:none">
+          <div style="display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;gap:.5rem">
+            <div style="min-width:0">
+              <p id="fileName" class="file-name"></p>
+              <p id="fileMeta" class="file-meta"></p>
+            </div>
+            <button type="button" id="removeBtn" class="sv-btn sv-btn-secondary" style="padding:.375rem .75rem;font-size:.75rem">Remove</button>
+          </div>
+          <div class="progress">
+            <div class="progress-track"><div class="progress-fill" style="width:100%"></div></div>
+            <p class="progress-label">100% uploaded (sample)</p>
+          </div>
+          <button type="button" id="uploadBtn" class="sv-btn sv-btn-primary" style="margin-top:.75rem;width:100%">Upload Dataset</button>
+        </div>
+
+        <div id="alerts" class="alerts" aria-live="polite"></div>
+      </section>
+
+      <div class="stack">
+        <section class="sv-card" aria-labelledby="schema-heading">
+          <h2 class="section-title" id="schema-heading">Detected Schema</h2>
+          <div class="table-scroll">
+            <table style="min-width:560px">
+              <caption class="sr-only">Columns detected in the uploaded dataset</caption>
+              <thead>
+                <tr><th>Column</th><th>Data Type</th><th>PII Type</th><th>Distinct Values</th><th>Min</th><th>Max</th></tr>
+              </thead>
+              <tbody>
+                <tr><td style="font-weight:500;color:#0f172a">patient_id</td><td>INTEGER</td><td><span class="badge-none">none</span></td><td>5,000</td><td>1</td><td>5000</td></tr>
+                <tr style="background:#fffbeb80"><td style="font-weight:500;color:#0f172a">email</td><td>STRING</td><td><span class="badge-pii">EMAIL</span></td><td>4,980</td><td>aarti.b@example.com</td><td>vikram.r@example.com</td></tr>
+                <tr style="background:#fffbeb80"><td style="font-weight:500;color:#0f172a">phone</td><td>STRING</td><td><span class="badge-pii">PHONE</span></td><td>4,912</td><td>+919600000001</td><td>+919999999999</td></tr>
+                <tr><td style="font-weight:500;color:#0f172a">admitted_on</td><td>DATE</td><td><span class="badge-none">none</span></td><td>365</td><td>2024-01-01</td><td>2024-12-31</td></tr>
+                <tr><td style="font-weight:500;color:#0f172a">bill_amount</td><td>DECIMAL</td><td><span class="badge-none">none</span></td><td>3,402</td><td>450.00</td><td>98,700.50</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="footnote">Values are exactly as returned by the backend. Sensitivity overrides are not supported by this API.</p>
+        </section>
+
+        <section class="sv-card" aria-labelledby="preview-heading">
+          <h2 class="section-title" id="preview-heading">Dataset Preview</h2>
+          <div class="table-scroll">
+            <table style="min-width:480px;font-size:.75rem">
+              <caption class="sr-only">First rows of the uploaded file, exactly as returned by the backend</caption>
+              <thead><tr><th>patient_id</th><th>email</th><th>phone</th><th>admitted_on</th><th>bill_amount</th></tr></thead>
+              <tbody>
+                <tr><td>1</td><td>aarti.b@example.com</td><td>+919600000001</td><td>2024-01-03</td><td>12,400.00</td></tr>
+                <tr><td>2</td><td>vikram.r@example.com</td><td>+919600000002</td><td>2024-01-04</td><td>8,150.50</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="sv-card" aria-labelledby="next-heading">
+          <h2 class="section-title" id="next-heading">Next step</h2>
+          <a class="sv-btn sv-btn-primary" style="margin-top:.75rem;width:100%" href="Privacy Analysis page.Html">Analyze Privacy</a>
+        </section>
+      </div>
+
+    </div>
+
+    <p class="footnote">Static offline preview generated for visual verification · SynthVault MCA Project</p>
+  </main>
+</div>
+<script>
+(function () {
+  var MAX_BYTES = 5 * 1024 * 1024; /* mirrors DatasetService.MAX_SIZE_BYTES */
+  var input = document.getElementById('fileInput');
+  var dropzone = document.getElementById('dropzone');
+  var browseBtn = document.getElementById('browseBtn');
+  var fileCard = document.getElementById('fileCard');
+  var fileNameEl = document.getElementById('fileName');
+  var fileMetaEl = document.getElementById('fileMeta');
+  var removeBtn = document.getElementById('removeBtn');
+  var uploadBtn = document.getElementById('uploadBtn');
+  var alerts = document.getElementById('alerts');
+
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function show(tone, title, message) {
+    var el = document.createElement('div');
+    el.className = 'alert alert-' + tone;
+    el.setAttribute('role', tone === 'warning' ? 'alert' : 'status');
+    el.innerHTML = '<span class="ico" aria-hidden="true">' + (tone === 'success' ? '✓' : '!') + '</span><div><p style="font-weight:600">' +
+      esc(title) + '</p><p style="margin-top:.15rem">' + esc(message) + '</p></div>';
+    alerts.appendChild(el);
+  }
+  function clearAlerts() { alerts.innerHTML = ''; }
+  function formatBytes(b) {
+    var n = Number(b);
+    if (!isFinite(n) || n < 0) { return '-'; }
+    if (n < 1024) { return n + ' B'; }
+    if (n < 1024 * 1024) { return (n / 1024).toFixed(1) + ' KB'; }
+    return (n / (1024 * 1024)).toFixed(1) + ' MB';
+  }
+  function validate(file) {
+    if (!file) { return 'Please choose a CSV file'; }
+    var name = typeof file.name === 'string' ? file.name : '';
+    if (name.toLowerCase().slice(-4) !== '.csv') { return 'Only .csv files are allowed'; }
+    if (file.size > MAX_BYTES) { return 'Maximum file size is 5 MB'; }
+    return null;
+  }
+  function setFile(file) {
+    clearAlerts();
+    var problem = validate(file);
+    if (problem) {
+      show('warning', 'Please select a supported dataset file.', problem);
+      fileCard.style.display = 'none';
+      return;
+    }
+    fileNameEl.textContent = file.name;
+    fileMetaEl.textContent = formatBytes(file.size) + ' · ' + (file.type || 'text/csv');
+    fileCard.style.display = 'block';
+  }
+  function clearFile() { fileCard.style.display = 'none'; input.value = ''; clearAlerts(); }
+
+  browseBtn.addEventListener('click', function () { input.click(); });
+  input.addEventListener('change', function (e) { setFile(e.target.files ? e.target.files[0] : null); });
+  removeBtn.addEventListener('click', clearFile);
+
+  /* Native drag & drop (Part 2). The page also blocks the browser from
+     opening files dropped outside the dropzone. */
+  dropzone.addEventListener('dragover', function (e) { e.preventDefault(); dropzone.classList.add('active'); });
+  dropzone.addEventListener('dragleave', function () { dropzone.classList.remove('active'); });
+  dropzone.addEventListener('drop', function (e) {
+    e.preventDefault();
+    dropzone.classList.remove('active');
+    setFile(e.dataTransfer && e.dataTransfer.files ? e.dataTransfer.files[0] : null);
+  });
+  window.addEventListener('dragover', function (e) { e.preventDefault(); });
+  window.addEventListener('drop', function (e) { e.preventDefault(); });
+
+  /* Upload requires the backend; this static preview never fakes progress. */
+  uploadBtn.addEventListener('click', function () {
+    show('info', 'Upload requires the running backend.',
+      'The production app sends this file to POST /api/projects/{projectId}/datasets (multipart field "file") and receives the full schema + PII + privacy analysis. Start the Spring Boot server and use npm run dev to see the real upload with live progress.');
+  });
+
+  /* Mobile nav */
+  var menuBtn = document.getElementById('menuBtn'), mobileNav = document.getElementById('mobileNav');
+  menuBtn.addEventListener('click', function () {
+    var open = mobileNav.classList.toggle('open');
+    menuBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { mobileNav.classList.remove('open'); } });
+
+  /* Prefill the sample state so the page demonstrates the analyzed flow. */
+  setFile({ name: 'patients.csv', size: 1258291, type: 'text/csv' });
+})();
+</script>
+
+</body>
+</html>
+

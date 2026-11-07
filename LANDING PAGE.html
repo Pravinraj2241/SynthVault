@@ -1,0 +1,726 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="SynthVault is a privacy-preserving synthetic data platform: upload sensitive tabular data, detect privacy risks, generate synthetic data and verify statistical similarity."
+    />
+    <meta name="theme-color" content="#4338ca" />
+    <meta name="generator" content="SynthVault static export (npm run export:landing)" />
+    <title>SynthVault - Privacy-Preserving Synthetic Data Platform</title>
+
+    <!--
+      ===========================================================================
+      SynthVault - Landing / Home page (standalone offline copy)
+      ===========================================================================
+      This single file is the complete landing page. The compiled Tailwind CSS is
+      inlined below and the script at the end is plain JavaScript, so the page
+      renders identically with no server, no internet connection and no build
+      step - just double-click it.
+
+      Regenerate after changing the app:
+          cd frontend
+          npm run build
+          npm run export:landing
+
+      Rendered state: signed out. In the React app at "/" this page switches to
+      "Open Dashboard" when AuthContext holds a session; a standalone file has no
+      session of its own, so the public "Sign in" state is the correct one here.
+      ===========================================================================
+    -->
+    <style>
+*,:before,:after{--tw-border-spacing-x: 0;--tw-border-spacing-y: 0;--tw-translate-x: 0;--tw-translate-y: 0;--tw-rotate: 0;--tw-skew-x: 0;--tw-skew-y: 0;--tw-scale-x: 1;--tw-scale-y: 1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness: proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width: 0px;--tw-ring-offset-color: #fff;--tw-ring-color: rgb(59 130 246 / .5);--tw-ring-offset-shadow: 0 0 #0000;--tw-ring-shadow: 0 0 #0000;--tw-shadow: 0 0 #0000;--tw-shadow-colored: 0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x: 0;--tw-border-spacing-y: 0;--tw-translate-x: 0;--tw-translate-y: 0;--tw-rotate: 0;--tw-skew-x: 0;--tw-skew-y: 0;--tw-scale-x: 1;--tw-scale-y: 1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness: proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width: 0px;--tw-ring-offset-color: #fff;--tw-ring-color: rgb(59 130 246 / .5);--tw-ring-offset-shadow: 0 0 #0000;--tw-ring-shadow: 0 0 #0000;--tw-shadow: 0 0 #0000;--tw-shadow-colored: 0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }*,:before,:after{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}:before,:after{--tw-content: ""}html,:host{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;-o-tab-size:4;tab-size:4;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,samp,pre{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,Liberation Mono,Courier New,monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dl,dd,h1,h2,h3,h4,h5,h6,hr,figure,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}ol,ul,menu{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::-moz-placeholder,textarea::-moz-placeholder{opacity:1;color:#9ca3af}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}button,[role=button]{cursor:pointer}:disabled{cursor:default}img,svg,video,canvas,audio,iframe,embed,object{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}:root{color-scheme:light}html{scroll-behavior:smooth}body{--tw-bg-opacity: 1;background-color:rgb(248 250 252 / var(--tw-bg-opacity, 1));font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;--tw-text-opacity: 1;color:rgb(30 41 59 / var(--tw-text-opacity, 1));-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,[tabindex]:focus-visible{border-radius:.125rem;outline:2px solid transparent;outline-offset:2px;--tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow, 0 0 #0000);--tw-ring-opacity: 1;--tw-ring-color: rgb(79 70 229 / var(--tw-ring-opacity, 1));--tw-ring-offset-width: 2px;--tw-ring-offset-color: #fff}.container{width:100%}@media(min-width:640px){.container{max-width:640px}}@media(min-width:768px){.container{max-width:768px}}@media(min-width:1024px){.container{max-width:1024px}}@media(min-width:1280px){.container{max-width:1280px}}@media(min-width:1536px){.container{max-width:1536px}}.sv-shell{margin-left:auto;margin-right:auto;width:100%;max-width:1200px;padding-left:1rem;padding-right:1rem}@media(min-width:640px){.sv-shell{padding-left:1.5rem;padding-right:1.5rem}}@media(min-width:1024px){.sv-shell{padding-left:2rem;padding-right:2rem}}.sv-card{border-radius:.75rem;border-width:1px;--tw-border-opacity: 1;border-color:rgb(226 232 240 / var(--tw-border-opacity, 1));--tw-bg-opacity: 1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1));padding:1.5rem;--tw-shadow: 0 1px 2px 0 rgb(0 0 0 / .05);--tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000),var(--tw-ring-shadow, 0 0 #0000),var(--tw-shadow)}.sv-btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;border-radius:.5rem;padding:.625rem 1rem;font-size:.875rem;line-height:1.25rem;font-weight:600;transition-property:color,background-color,border-color,text-decoration-color,fill,stroke;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.sv-btn:disabled{cursor:not-allowed;opacity:.6}.sv-btn-primary{--tw-bg-opacity: 1;background-color:rgb(67 56 202 / var(--tw-bg-opacity, 1));--tw-text-opacity: 1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.sv-btn-primary:hover{--tw-bg-opacity: 1;background-color:rgb(55 48 163 / var(--tw-bg-opacity, 1))}.sv-btn-primary:active{--tw-bg-opacity: 1;background-color:rgb(49 46 129 / var(--tw-bg-opacity, 1))}.sv-btn-secondary{border-width:1px;--tw-border-opacity: 1;border-color:rgb(203 213 225 / var(--tw-border-opacity, 1));--tw-bg-opacity: 1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1));--tw-text-opacity: 1;color:rgb(51 65 85 / var(--tw-text-opacity, 1))}.sv-btn-secondary:hover{--tw-bg-opacity: 1;background-color:rgb(241 245 249 / var(--tw-bg-opacity, 1))}.sv-btn-ghost{--tw-text-opacity: 1;color:rgb(51 65 85 / var(--tw-text-opacity, 1))}.sv-btn-ghost:hover{--tw-bg-opacity: 1;background-color:rgb(241 245 249 / var(--tw-bg-opacity, 1))}.sv-eyebrow{font-size:.875rem;line-height:1.25rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;--tw-text-opacity: 1;color:rgb(67 56 202 / var(--tw-text-opacity, 1))}.sv-section-title{font-size:1.5rem;line-height:2rem;font-weight:600;letter-spacing:-.025em;--tw-text-opacity: 1;color:rgb(15 23 42 / var(--tw-text-opacity, 1))}@media(min-width:640px){.sv-section-title{font-size:1.875rem;line-height:2.25rem}}.sv-link{font-weight:500;--tw-text-opacity: 1;color:rgb(67 56 202 / var(--tw-text-opacity, 1));text-underline-offset:4px}.sv-link:hover{text-decoration-line:underline}.sv-chip{display:inline-flex;align-items:center;border-radius:9999px;border-width:1px;--tw-border-opacity: 1;border-color:rgb(226 232 240 / var(--tw-border-opacity, 1));--tw-bg-opacity: 1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1));padding:.25rem .75rem;font-size:.875rem;line-height:1.25rem;--tw-text-opacity: 1;color:rgb(51 65 85 / var(--tw-text-opacity, 1))}.sv-input{display:block;width:100%;border-radius:.5rem;border-width:1px;--tw-border-opacity: 1;border-color:rgb(203 213 225 / var(--tw-border-opacity, 1));--tw-bg-opacity: 1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1));padding:.5rem .75rem;font-size:.875rem;line-height:1.25rem;--tw-text-opacity: 1;color:rgb(15 23 42 / var(--tw-text-opacity, 1))}.sv-input::-moz-placeholder{--tw-text-opacity: 1;color:rgb(148 163 184 / var(--tw-text-opacity, 1))}.sv-input::placeholder{--tw-text-opacity: 1;color:rgb(148 163 184 / var(--tw-text-opacity, 1))}.sv-input:focus{--tw-border-opacity: 1;border-color:rgb(99 102 241 / var(--tw-border-opacity, 1))}.sv-label{margin-bottom:.25rem;display:block;font-size:.875rem;line-height:1.25rem;font-weight:500;--tw-text-opacity: 1;color:rgb(51 65 85 / var(--tw-text-opacity, 1))}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border-width:0}.\!visible{visibility:visible!important}.visible{visibility:visible}.absolute{position:absolute}.relative{position:relative}.sticky{position:sticky}.right-2{right:.5rem}.top-0{top:0}.top-1\/2{top:50%}.top-6{top:1.5rem}.z-40{z-index:40}.mx-auto{margin-left:auto;margin-right:auto}.mb-6{margin-bottom:1.5rem}.mt-0\.5{margin-top:.125rem}.mt-1{margin-top:.25rem}.mt-10{margin-top:2.5rem}.mt-2{margin-top:.5rem}.mt-3{margin-top:.75rem}.mt-4{margin-top:1rem}.mt-5{margin-top:1.25rem}.mt-6{margin-top:1.5rem}.mt-8{margin-top:2rem}.block{display:block}.flex{display:flex}.inline-flex{display:inline-flex}.table{display:table}.grid{display:grid}.hidden{display:none}.h-10{height:2.5rem}.h-3{height:.75rem}.h-4{height:1rem}.h-5{height:1.25rem}.h-6{height:1.5rem}.h-8{height:2rem}.h-9{height:2.25rem}.min-h-screen{min-height:100vh}.w-10{width:2.5rem}.w-2\/3{width:66.666667%}.w-32{width:8rem}.w-4{width:1rem}.w-5{width:1.25rem}.w-5\/6{width:83.333333%}.w-6{width:1.5rem}.w-60{width:15rem}.w-8{width:2rem}.w-9{width:2.25rem}.w-full{width:100%}.min-w-0{min-width:0px}.max-w-2xl{max-width:42rem}.max-w-3xl{max-width:48rem}.max-w-\[16rem\]{max-width:16rem}.max-w-\[calc\(100\%-32px\)\]{max-width:calc(100% - 32px)}.max-w-lg{max-width:32rem}.max-w-md{max-width:28rem}.max-w-shell{max-width:1200px}.max-w-sm{max-width:24rem}.max-w-xl{max-width:36rem}.flex-1{flex:1 1 0%}.flex-none{flex:none}.-translate-y-1\/2{--tw-translate-y: -50%;transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skew(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}@keyframes pulse{50%{opacity:.5}}.animate-pulse{animation:pulse 2s cubic-bezier(.4,0,.6,1) infinite}@keyframes spin{to{transform:rotate(360deg)}}.animate-spin{animation:spin 1s linear infinite}@keyframes sv-fade{0%{opacity:0}to{opacity:1}}.animate-sv-fade{animation:sv-fade .15s ease-out}.cursor-default{cursor:default}.scroll-mt-20{scroll-margin-top:5rem}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-start{align-items:flex-start}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-1{gap:.25rem}.gap-10{gap:2.5rem}.gap-2{gap:.5rem}.gap-3{gap:.75rem}.gap-4{gap:1rem}.gap-8{gap:2rem}.space-y-1>:not([hidden])~:not([hidden]){--tw-space-y-reverse: 0;margin-top:calc(.25rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(.25rem * var(--tw-space-y-reverse))}.space-y-2>:not([hidden])~:not([hidden]){--tw-space-y-reverse: 0;margin-top:calc(.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(.5rem * var(--tw-space-y-reverse))}.space-y-4>:not([hidden])~:not([hidden]){--tw-space-y-reverse: 0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.space-y-6>:not([hidden])~:not([hidden]){--tw-space-y-reverse: 0;margin-top:calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.5rem * var(--tw-space-y-reverse))}.divide-y>:not([hidden])~:not([hidden]){--tw-divide-y-reverse: 0;border-top-width:calc(1px * calc(1 - var(--tw-divide-y-reverse)));border-bottom-width:calc(1px * var(--tw-divide-y-reverse))}.divide-slate-200>:not([hidden])~:not([hidden]){--tw-divide-opacity: 1;border-color:rgb(226 232 240 / var(--tw-divide-opacity, 1))}.truncate{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.break-words{overflow-wrap:break-word}.rounded{border-radius:.25rem}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:.5rem}.rounded-xl{border-radius:.75rem}.border{border-width:1px}.border-b{border-bottom-width:1px}.border-t{border-top-width:1px}.border-amber-300{--tw-border-opacity: 1;border-color:rgb(252 211 77 / var(--tw-border-opacity, 1))}.border-current{border-color:currentColor}.border-emerald-300{--tw-border-opacity: 1;border-color:rgb(110 231 183 / var(--tw-border-opacity, 1))}.border-red-300{--tw-border-opacity: 1;border-color:rgb(252 165 165 / var(--tw-border-opacity, 1))}.border-slate-200{--tw-border-opacity: 1;border-color:rgb(226 232 240 / var(--tw-border-opacity, 1))}.border-slate-300{--tw-border-opacity: 1;border-color:rgb(203 213 225 / var(--tw-border-opacity, 1))}.bg-amber-50{--tw-bg-opacity: 1;background-color:rgb(255 251 235 / var(--tw-bg-opacity, 1))}.bg-brand-50{--tw-bg-opacity: 1;background-color:rgb(238 242 255 / var(--tw-bg-opacity, 1))}.bg-brand-700{--tw-bg-opacity: 1;background-color:rgb(67 56 202 / var(--tw-bg-opacity, 1))}.bg-emerald-50{--tw-bg-opacity: 1;background-color:rgb(236 253 245 / var(--tw-bg-opacity, 1))}.bg-red-50{--tw-bg-opacity: 1;background-color:rgb(254 242 242 / var(--tw-bg-opacity, 1))}.bg-slate-200{--tw-bg-opacity: 1;background-color:rgb(226 232 240 / var(--tw-bg-opacity, 1))}.bg-slate-50{--tw-bg-opacity: 1;background-color:rgb(248 250 252 / var(--tw-bg-opacity, 1))}.bg-slate-900{--tw-bg-opacity: 1;background-color:rgb(15 23 42 / var(--tw-bg-opacity, 1))}.bg-white{--tw-bg-opacity: 1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.bg-white\/20{background-color:#fff3}.p-3{padding:.75rem}.p-4{padding:1rem}.p-5{padding:1.25rem}.p-6{padding:1.5rem}.\!px-3{padding-left:.75rem!important;padding-right:.75rem!important}.\!py-1\.5{padding-top:.375rem!important;padding-bottom:.375rem!important}.\!py-2{padding-top:.5rem!important;padding-bottom:.5rem!important}.px-2{padding-left:.5rem;padding-right:.5rem}.px-3{padding-left:.75rem;padding-right:.75rem}.px-4{padding-left:1rem;padding-right:1rem}.py-0\.5{padding-top:.125rem;padding-bottom:.125rem}.py-1{padding-top:.25rem;padding-bottom:.25rem}.py-10{padding-top:2.5rem;padding-bottom:2.5rem}.py-12{padding-top:3rem;padding-bottom:3rem}.py-14{padding-top:3.5rem;padding-bottom:3.5rem}.py-2{padding-top:.5rem;padding-bottom:.5rem}.py-3{padding-top:.75rem;padding-bottom:.75rem}.py-6{padding-top:1.5rem;padding-bottom:1.5rem}.pr-16{padding-right:4rem}.pt-4{padding-top:1rem}.pt-6{padding-top:1.5rem}.text-center{text-align:center}.font-mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,Liberation Mono,Courier New,monospace}.\!text-xs{font-size:.75rem!important;line-height:1rem!important}.text-2xl{font-size:1.5rem;line-height:2rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-base{font-size:1rem;line-height:1.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:.75rem;line-height:1rem}.font-bold{font-weight:700}.font-medium{font-weight:500}.font-semibold{font-weight:600}.uppercase{text-transform:uppercase}.leading-relaxed{line-height:1.625}.leading-tight{line-height:1.25}.tracking-tight{letter-spacing:-.025em}.tracking-wider{letter-spacing:.05em}.text-amber-900{--tw-text-opacity: 1;color:rgb(120 53 15 / var(--tw-text-opacity, 1))}.text-brand-100{--tw-text-opacity: 1;color:rgb(224 231 255 / var(--tw-text-opacity, 1))}.text-brand-800{--tw-text-opacity: 1;color:rgb(55 48 163 / var(--tw-text-opacity, 1))}.text-emerald-700{--tw-text-opacity: 1;color:rgb(4 120 87 / var(--tw-text-opacity, 1))}.text-emerald-800{--tw-text-opacity: 1;color:rgb(6 95 70 / var(--tw-text-opacity, 1))}.text-red-700{--tw-text-opacity: 1;color:rgb(185 28 28 / var(--tw-text-opacity, 1))}.text-red-800{--tw-text-opacity: 1;color:rgb(153 27 27 / var(--tw-text-opacity, 1))}.text-slate-300{--tw-text-opacity: 1;color:rgb(203 213 225 / var(--tw-text-opacity, 1))}.text-slate-400{--tw-text-opacity: 1;color:rgb(148 163 184 / var(--tw-text-opacity, 1))}.text-slate-500{--tw-text-opacity: 1;color:rgb(100 116 139 / var(--tw-text-opacity, 1))}.text-slate-600{--tw-text-opacity: 1;color:rgb(71 85 105 / var(--tw-text-opacity, 1))}.text-slate-700{--tw-text-opacity: 1;color:rgb(51 65 85 / var(--tw-text-opacity, 1))}.text-slate-800{--tw-text-opacity: 1;color:rgb(30 41 59 / var(--tw-text-opacity, 1))}.text-slate-900{--tw-text-opacity: 1;color:rgb(15 23 42 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity: 1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.opacity-25{opacity:.25}.opacity-75{opacity:.75}.shadow-sm{--tw-shadow: 0 1px 2px 0 rgb(0 0 0 / .05);--tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000),var(--tw-ring-shadow, 0 0 #0000),var(--tw-shadow)}.ring-1{--tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow, 0 0 #0000)}.ring-inset{--tw-ring-inset: inset}.ring-white\/40{--tw-ring-color: rgb(255 255 255 / .4)}.filter{filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.transition-colors{transition-property:color,background-color,border-color,text-decoration-color,fill,stroke;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.duration-150{transition-duration:.15s}.hover\:bg-slate-100:hover{--tw-bg-opacity: 1;background-color:rgb(241 245 249 / var(--tw-bg-opacity, 1))}.hover\:bg-white\/10:hover{background-color:#ffffff1a}.hover\:text-slate-700:hover{--tw-text-opacity: 1;color:rgb(51 65 85 / var(--tw-text-opacity, 1))}.hover\:text-slate-900:hover{--tw-text-opacity: 1;color:rgb(15 23 42 / var(--tw-text-opacity, 1))}.focus\:not-sr-only:focus{position:static;width:auto;height:auto;padding:0;margin:0;overflow:visible;clip:auto;white-space:normal}.focus\:absolute:focus{position:absolute}.focus\:left-4:focus{left:1rem}.focus\:top-4:focus{top:1rem}.focus\:z-50:focus{z-index:50}.focus\:rounded:focus{border-radius:.25rem}.focus\:bg-white:focus{--tw-bg-opacity: 1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.focus\:px-3:focus{padding-left:.75rem;padding-right:.75rem}.focus\:py-2:focus{padding-top:.5rem;padding-bottom:.5rem}.focus\:text-sm:focus{font-size:.875rem;line-height:1.25rem}.focus\:font-semibold:focus{font-weight:600}.focus\:text-brand-800:focus{--tw-text-opacity: 1;color:rgb(55 48 163 / var(--tw-text-opacity, 1))}.focus\:shadow:focus{--tw-shadow: 0 1px 3px 0 rgb(0 0 0 / .1), 0 1px 2px -1px rgb(0 0 0 / .1);--tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px -1px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000),var(--tw-ring-shadow, 0 0 #0000),var(--tw-shadow)}.focus-visible\:outline-none:focus-visible{outline:2px solid transparent;outline-offset:2px}.focus-visible\:ring-2:focus-visible{--tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow, 0 0 #0000)}.focus-visible\:ring-brand-600:focus-visible{--tw-ring-opacity: 1;--tw-ring-color: rgb(79 70 229 / var(--tw-ring-opacity, 1))}.disabled\:opacity-50:disabled{opacity:.5}@media(min-width:640px){.sm\:w-auto{width:auto}.sm\:max-w-\[440px\]{max-width:440px}.sm\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.sm\:flex-row{flex-direction:row}.sm\:flex-wrap{flex-wrap:wrap}.sm\:items-start{align-items:flex-start}.sm\:items-end{align-items:flex-end}.sm\:items-center{align-items:center}.sm\:justify-center{justify-content:center}.sm\:justify-between{justify-content:space-between}.sm\:gap-6{gap:1.5rem}.sm\:px-6{padding-left:1.5rem;padding-right:1.5rem}.sm\:py-16{padding-top:4rem;padding-bottom:4rem}.sm\:text-right{text-align:right}.sm\:text-2xl{font-size:1.5rem;line-height:2rem}.sm\:text-3xl{font-size:1.875rem;line-height:2.25rem}.sm\:text-4xl{font-size:2.25rem;line-height:2.5rem}.sm\:text-lg{font-size:1.125rem;line-height:1.75rem}}@media(min-width:1024px){.lg\:block{display:block}.lg\:flex{display:flex}.lg\:hidden{display:none}.lg\:w-1\/2{width:50%}.lg\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.lg\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.lg\:grid-cols-5{grid-template-columns:repeat(5,minmax(0,1fr))}.lg\:flex-row{flex-direction:row}.lg\:flex-col{flex-direction:column}.lg\:items-center{align-items:center}.lg\:justify-center{justify-content:center}.lg\:bg-brand-700{--tw-bg-opacity: 1;background-color:rgb(67 56 202 / var(--tw-bg-opacity, 1))}.lg\:px-16{padding-left:4rem;padding-right:4rem}.lg\:px-8{padding-left:2rem;padding-right:2rem}.lg\:py-12{padding-top:3rem;padding-bottom:3rem}.lg\:py-20{padding-top:5rem;padding-bottom:5rem}.lg\:text-5xl{font-size:3rem;line-height:1}}
+
+    </style>
+  </head>
+
+  <body class="bg-white">
+    <div class="min-h-screen bg-white">
+      <a
+        href="#main-content"
+        class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded focus:bg-white focus:px-3 focus:py-2 focus:text-sm focus:font-semibold focus:text-brand-800 focus:shadow"
+      >
+        Skip to main content
+      </a>
+      <header class="sticky top-0 z-40 border-b border-slate-200 bg-white">
+        <div class="sv-shell flex items-center justify-between gap-4 py-3">
+          <a href="#main-content" aria-label="SynthVault - home" class="rounded-lg">
+            <span class="flex items-center gap-2">
+              <span
+                aria-hidden="true"
+                class="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-700 text-sm font-bold text-white"
+              >
+                SV
+              </span>
+              <span class="text-lg font-semibold tracking-tight text-slate-900">SynthVault</span>
+            </span>
+          </a>
+
+          <nav aria-label="Primary" class="hidden lg:block">
+            <ul class="flex items-center gap-1">
+              <li>
+                <a
+                  href="#how-it-works"
+                  class="rounded-lg px-3 py-2 text-sm font-medium text-slate-700 transition-colors duration-150 hover:bg-slate-100 hover:text-slate-900"
+                  >How It Works</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#security"
+                  class="rounded-lg px-3 py-2 text-sm font-medium text-slate-700 transition-colors duration-150 hover:bg-slate-100 hover:text-slate-900"
+                  >Security</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#technology"
+                  class="rounded-lg px-3 py-2 text-sm font-medium text-slate-700 transition-colors duration-150 hover:bg-slate-100 hover:text-slate-900"
+                  >Technology</a
+                >
+              </li>
+            </ul>
+          </nav>
+
+          <div class="hidden items-center gap-3 lg:flex">
+            <a href="/login" data-app-route class="sv-btn sv-btn-primary">Sign in</a>
+          </div>
+
+          <button
+            type="button"
+            data-mobile-menu-button
+            aria-expanded="false"
+            aria-controls="landing-mobile-nav"
+            class="sv-btn sv-btn-secondary !px-3 !py-2 lg:hidden"
+          >
+            <span class="sr-only" data-mobile-menu-label>Open navigation menu</span>
+            <svg viewBox="0 0 20 20" class="h-5 w-5" fill="currentColor" aria-hidden="true">
+              <path data-mobile-menu-icon d="M3 5h14v2H3V5Zm0 4h14v2H3V9Zm0 4h14v2H3v-2Z" />
+            </svg>
+          </button>
+        </div>
+        <nav
+          id="landing-mobile-nav"
+          data-mobile-nav
+          aria-label="Mobile"
+          hidden
+          class="animate-sv-fade border-t border-slate-200 bg-white px-4 py-3 lg:hidden"
+        >
+          <ul class="space-y-1">
+            <li>
+              <a
+                href="#how-it-works"
+                data-mobile-nav-link
+                class="block rounded-lg px-3 py-2 text-sm font-medium text-slate-700 transition-colors duration-150 hover:bg-slate-100 hover:text-slate-900"
+                >How It Works</a
+              >
+            </li>
+            <li>
+              <a
+                href="#security"
+                data-mobile-nav-link
+                class="block rounded-lg px-3 py-2 text-sm font-medium text-slate-700 transition-colors duration-150 hover:bg-slate-100 hover:text-slate-900"
+                >Security</a
+              >
+            </li>
+            <li>
+              <a
+                href="#technology"
+                data-mobile-nav-link
+                class="block rounded-lg px-3 py-2 text-sm font-medium text-slate-700 transition-colors duration-150 hover:bg-slate-100 hover:text-slate-900"
+                >Technology</a
+              >
+            </li>
+          </ul>
+
+          <div class="mt-4 flex flex-col gap-2">
+            <a
+              href="/login"
+              data-app-route
+              data-mobile-nav-link
+              class="sv-btn sv-btn-primary w-full"
+              >Sign in</a
+            >
+          </div>
+        </nav>
+      </header>
+
+      <!-- Shown only when a link that needs the running app is clicked, so the
+           page never drops the visitor on a confusing "file not found" screen. -->
+      <div class="sv-shell pt-4" data-offline-notice-wrap hidden>
+        <div
+          role="status"
+          aria-live="polite"
+          class="flex items-start gap-3 rounded-lg border p-4 text-sm border-slate-300 bg-slate-50 text-slate-700"
+        >
+          <span
+            aria-hidden="true"
+            class="mt-0.5 flex h-5 w-5 flex-none items-center justify-center rounded-full border border-current text-xs font-bold"
+          >
+            i
+          </span>
+          <div class="min-w-0 flex-1">
+            <p class="font-semibold">This is the standalone offline landing page</p>
+            <p class="mt-0.5 break-words">
+              Signing in, the dashboard and the project screens are part of the React application
+              (React 18 + Vite) that talks to the SynthVault API, so they are not contained in this
+              single static file. Start the app with
+              <code class="font-mono text-xs text-slate-800">cd frontend &amp;&amp; npm run dev</code>
+              and open http://localhost:5173/login to use them.
+            </p>
+            <div class="mt-3 flex flex-wrap gap-2">
+              <button
+                type="button"
+                data-offline-notice-close
+                class="sv-btn sv-btn-ghost !py-1.5 !text-xs"
+              >
+                Dismiss
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+<main id="main-content">
+        <!-- ---------------- 2. HERO ---------------- -->
+        <section aria-labelledby="hero-heading" class="border-b border-slate-200 bg-slate-50">
+          <div class="sv-shell grid gap-10 py-14 sm:py-16 lg:grid-cols-2 lg:items-center lg:py-20">
+            <div>
+              <p class="sv-eyebrow">Synthetic data, backed by measurable privacy</p>
+              <h1
+                id="hero-heading"
+                class="mt-3 text-3xl font-bold leading-tight tracking-tight text-slate-900 sm:text-4xl lg:text-5xl"
+              >
+                Privacy-Preserving Synthetic Data Platform
+              </h1>
+              <p class="mt-5 max-w-xl text-base text-slate-600 sm:text-lg">
+                Upload sensitive tabular data, detect privacy risks, generate synthetic data, and
+                verify statistical similarity through one secure workflow.
+              </p>
+
+              <div class="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                <a href="/login" data-app-route class="sv-btn sv-btn-primary w-full sm:w-auto">
+                  Get Started
+                </a>
+                <a href="/login" data-app-route class="sv-btn sv-btn-secondary w-full sm:w-auto">
+                  Sign in
+                </a>
+              </div>
+
+              <p class="mt-4 text-sm text-slate-600">
+                SynthVault is a sign-in-only workspace: your projects and datasets are visible to
+                your account alone.
+              </p>
+            </div>
+
+            <!-- Fact panel - these values are the API's own enums, not marketing metrics. -->
+            <div class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+              <h2 class="text-sm font-semibold uppercase tracking-wider text-slate-500">
+                What the workflow covers
+              </h2>
+              <dl class="mt-4 divide-y divide-slate-200">
+                <div class="flex flex-col gap-1 py-3 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
+                  <dt class="text-sm font-medium text-slate-900">PII categories detected</dt>
+                  <dd class="font-mono text-xs text-slate-600 sm:text-right">
+                    EMAIL, PHONE, AADHAAR, PAN, CREDIT_CARD
+                  </dd>
+                </div>
+                <div class="flex flex-col gap-1 py-3 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
+                  <dt class="text-sm font-medium text-slate-900">Risk levels scored</dt>
+                  <dd class="font-mono text-xs text-slate-600 sm:text-right">
+                    LOW, MEDIUM, HIGH, CRITICAL
+                  </dd>
+                </div>
+                <div class="flex flex-col gap-1 py-3 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
+                  <dt class="text-sm font-medium text-slate-900">Column types inferred</dt>
+                  <dd class="font-mono text-xs text-slate-600 sm:text-right">
+                    INTEGER, DECIMAL, BOOLEAN, DATE, STRING
+                  </dd>
+                </div>
+                <div class="flex flex-col gap-1 py-3 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
+                  <dt class="text-sm font-medium text-slate-900">Input format</dt>
+                  <dd class="font-mono text-xs text-slate-600 sm:text-right">
+                    CSV uploads up to 5 MB
+                  </dd>
+                </div>
+              </dl>
+            </div>
+          </div>
+        </section>
+<!-- ---------------- 3. PRODUCT WORKFLOW ---------------- -->
+        <section
+          id="how-it-works"
+          aria-labelledby="workflow-heading"
+          class="scroll-mt-20 border-b border-slate-200 bg-white"
+        >
+          <div class="sv-shell py-14 sm:py-16">
+            <p class="sv-eyebrow">Product workflow</p>
+            <h2 id="workflow-heading" class="sv-section-title mt-2">
+              Five steps from raw file to verified synthetic data
+            </h2>
+            <p class="mt-3 max-w-2xl text-slate-600">
+              Each step runs inside your own project workspace, and every result stays available for
+              review before you move on.
+            </p>
+
+            <ol class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+              <li class="sv-card flex flex-col p-5">
+                <span
+                  aria-hidden="true"
+                  class="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-brand-50 font-mono text-sm font-semibold text-brand-800"
+                >
+                  01
+                </span>
+                <h3 class="mt-3 text-base font-semibold text-slate-900">
+                  <span class="sr-only">Step 01: </span>Upload Dataset
+                </h3>
+                <p class="mt-2 text-sm text-slate-600">
+                  Send a CSV file into a project workspace; SynthVault validates and stores the
+                  original securely.
+                </p>
+              </li>
+
+              <li class="sv-card flex flex-col p-5">
+                <span
+                  aria-hidden="true"
+                  class="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-brand-50 font-mono text-sm font-semibold text-brand-800"
+                >
+                  02
+                </span>
+                <h3 class="mt-3 text-base font-semibold text-slate-900">
+                  <span class="sr-only">Step 02: </span>Detect Schema &amp; PII
+                </h3>
+                <p class="mt-2 text-sm text-slate-600">
+                  Every column is typed and scanned for personal data such as emails, phone numbers,
+                  Aadhaar, PAN and cards.
+                </p>
+              </li>
+
+              <li class="sv-card flex flex-col p-5">
+                <span
+                  aria-hidden="true"
+                  class="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-brand-50 font-mono text-sm font-semibold text-brand-800"
+                >
+                  03
+                </span>
+                <h3 class="mt-3 text-base font-semibold text-slate-900">
+                  <span class="sr-only">Step 03: </span>Analyze Privacy Risk
+                </h3>
+                <p class="mt-2 text-sm text-slate-600">
+                  A scored privacy report grades the dataset from LOW to CRITICAL and explains which
+                  columns drive the risk.
+                </p>
+              </li>
+
+              <li class="sv-card flex flex-col p-5">
+                <span
+                  aria-hidden="true"
+                  class="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-brand-50 font-mono text-sm font-semibold text-brand-800"
+                >
+                  04
+                </span>
+                <h3 class="mt-3 text-base font-semibold text-slate-900">
+                  <span class="sr-only">Step 04: </span>Generate Synthetic Data
+                </h3>
+                <p class="mt-2 text-sm text-slate-600">
+                  Choose a row count and generate a replacement dataset whose sensitive fields are
+                  fabricated, never copied.
+                </p>
+              </li>
+
+              <li class="sv-card flex flex-col p-5">
+                <span
+                  aria-hidden="true"
+                  class="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-brand-50 font-mono text-sm font-semibold text-brand-800"
+                >
+                  05
+                </span>
+                <h3 class="mt-3 text-base font-semibold text-slate-900">
+                  <span class="sr-only">Step 05: </span>Verify Similarity
+                </h3>
+                <p class="mt-2 text-sm text-slate-600">
+                  Compare per-column and overall statistics to confirm the synthetic data still
+                  represents the original.
+                </p>
+              </li>
+            </ol>
+          </div>
+        </section>
+<!-- ---------------- 4. VALUE SECTION ---------------- -->
+        <section aria-labelledby="value-heading" class="border-b border-slate-200 bg-slate-50">
+          <div class="sv-shell py-14 sm:py-16">
+            <p class="sv-eyebrow">Platform value</p>
+            <h2 id="value-heading" class="sv-section-title mt-2">
+              Privacy, generation and proof in one place
+            </h2>
+
+            <div class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              <article class="sv-card">
+                <h3 class="text-base font-semibold text-slate-900">Privacy Analysis</h3>
+                <p class="mt-2 text-sm text-slate-600">
+                  Automatic schema detection and PII classification run on upload, then a weighted
+                  privacy score turns those findings into one clear risk level for the dataset.
+                </p>
+              </article>
+              <article class="sv-card">
+                <h3 class="text-base font-semibold text-slate-900">Synthetic Generation</h3>
+                <p class="mt-2 text-sm text-slate-600">
+                  Generate any row count you need. Sensitive identifiers are synthesised, numeric and
+                  date ranges stay inside the original bounds, and category values are sampled from
+                  the real distribution.
+                </p>
+              </article>
+              <article class="sv-card">
+                <h3 class="text-base font-semibold text-slate-900">Statistical Verification</h3>
+                <p class="mt-2 text-sm text-slate-600">
+                  Verify per-column and overall similarity between the original and synthetic data so
+                  you can prove the output is representative before it leaves your team.
+                </p>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <!-- ---------------- 5. SECURITY SECTION ---------------- -->
+        <section
+          id="security"
+          aria-labelledby="security-heading"
+          class="scroll-mt-20 border-b border-slate-200 bg-white"
+        >
+          <div class="sv-shell py-14 sm:py-16">
+            <p class="sv-eyebrow">Security</p>
+            <h2 id="security-heading" class="sv-section-title mt-2">
+              Controls implemented in the platform today
+            </h2>
+            <p class="mt-3 max-w-2xl text-slate-600">
+              Only capabilities that already exist in the platform are listed here. Anything still on
+              the roadmap is deliberately left out rather than advertised early.
+            </p>
+
+            <ul class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              <li class="sv-card flex items-start gap-3">
+                <span
+                  aria-hidden="true"
+                  class="mt-0.5 flex h-6 w-6 flex-none items-center justify-center rounded-full bg-emerald-50 text-emerald-700"
+                >
+                  <svg
+                    viewBox="0 0 20 20"
+                    class="h-4 w-4"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M4 10.5 8 14.5 16 5.5" />
+                  </svg>
+                </span>
+                <span>
+                  <h3 class="text-base font-semibold text-slate-900">JWT authentication</h3>
+                  <p class="mt-1 text-sm text-slate-600">
+                    Sessions are issued on login and required by every protected endpoint.
+                  </p>
+                </span>
+              </li>
+
+              <li class="sv-card flex items-start gap-3">
+                <span
+                  aria-hidden="true"
+                  class="mt-0.5 flex h-6 w-6 flex-none items-center justify-center rounded-full bg-emerald-50 text-emerald-700"
+                >
+                  <svg
+                    viewBox="0 0 20 20"
+                    class="h-4 w-4"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M4 10.5 8 14.5 16 5.5" />
+                  </svg>
+                </span>
+                <span>
+                  <h3 class="text-base font-semibold text-slate-900">Role-based access control</h3>
+                  <p class="mt-1 text-sm text-slate-600">
+                    USER and ADMIN roles separate everyday work from administration endpoints.
+                  </p>
+                </span>
+              </li>
+
+              <li class="sv-card flex items-start gap-3">
+                <span
+                  aria-hidden="true"
+                  class="mt-0.5 flex h-6 w-6 flex-none items-center justify-center rounded-full bg-emerald-50 text-emerald-700"
+                >
+                  <svg
+                    viewBox="0 0 20 20"
+                    class="h-4 w-4"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M4 10.5 8 14.5 16 5.5" />
+                  </svg>
+                </span>
+                <span>
+                  <h3 class="text-base font-semibold text-slate-900">API-key support</h3>
+                  <p class="mt-1 text-sm text-slate-600">
+                    Non-interactive integrations can authenticate with a managed API key.
+                  </p>
+                </span>
+              </li>
+
+              <li class="sv-card flex items-start gap-3">
+                <span
+                  aria-hidden="true"
+                  class="mt-0.5 flex h-6 w-6 flex-none items-center justify-center rounded-full bg-emerald-50 text-emerald-700"
+                >
+                  <svg
+                    viewBox="0 0 20 20"
+                    class="h-4 w-4"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M4 10.5 8 14.5 16 5.5" />
+                  </svg>
+                </span>
+                <span>
+                  <h3 class="text-base font-semibold text-slate-900">Rate limiting</h3>
+                  <p class="mt-1 text-sm text-slate-600">
+                    Requests are throttled so a single caller cannot exhaust the platform.
+                  </p>
+                </span>
+              </li>
+
+              <li class="sv-card flex items-start gap-3">
+                <span
+                  aria-hidden="true"
+                  class="mt-0.5 flex h-6 w-6 flex-none items-center justify-center rounded-full bg-emerald-50 text-emerald-700"
+                >
+                  <svg
+                    viewBox="0 0 20 20"
+                    class="h-4 w-4"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M4 10.5 8 14.5 16 5.5" />
+                  </svg>
+                </span>
+                <span>
+                  <h3 class="text-base font-semibold text-slate-900">Audit logging</h3>
+                  <p class="mt-1 text-sm text-slate-600">
+                    Security-relevant actions are recorded for later review.
+                  </p>
+                </span>
+              </li>
+            </ul>
+          </div>
+        </section>
+<!-- ---------------- 6. TECHNOLOGY SECTION ---------------- -->
+        <section
+          id="technology"
+          aria-labelledby="technology-heading"
+          class="scroll-mt-20 border-b border-slate-200 bg-slate-50"
+        >
+          <div class="sv-shell py-14 sm:py-16">
+            <p class="sv-eyebrow">Technology</p>
+            <h2 id="technology-heading" class="sv-section-title mt-2">
+              Built on a mainstream, auditable stack
+            </h2>
+
+            <ul class="mt-8 flex flex-wrap gap-2">
+              <li class="sv-chip">React 18</li>
+              <li class="sv-chip">Spring Boot 3</li>
+              <li class="sv-chip">Java 21</li>
+              <li class="sv-chip">MySQL</li>
+              <li class="sv-chip">Spring Data JPA</li>
+              <li class="sv-chip">Spring Security</li>
+              <li class="sv-chip">JWT</li>
+              <li class="sv-chip">REST API</li>
+              <li class="sv-chip">Docker</li>
+              <li class="sv-chip">Render deployment</li>
+            </ul>
+
+            <div class="mt-8 grid gap-4 sm:grid-cols-2">
+              <div class="sv-card">
+                <h3 class="text-base font-semibold text-slate-900">Frontend</h3>
+                <p class="mt-2 text-sm text-slate-600">
+                  A React 18 single-page app built with Vite and styled with Tailwind CSS. It talks to
+                  the API with Axios and keeps routing, menus and drag-and-drop on native browser APIs
+                  rather than extra UI or state libraries.
+                </p>
+              </div>
+              <div class="sv-card">
+                <h3 class="text-base font-semibold text-slate-900">Backend</h3>
+                <p class="mt-2 text-sm text-slate-600">
+                  A Spring Boot 3 REST API on Java 21, secured with Spring Security and JWT,
+                  persisting through Spring Data JPA and packaged with Docker for deployment.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+<!-- ---------------- 7. FINAL CTA ---------------- -->
+        <section aria-labelledby="final-cta-heading" class="bg-slate-900">
+          <div class="sv-shell py-14 text-center sm:py-16">
+            <h2
+              id="final-cta-heading"
+              class="mx-auto max-w-3xl text-2xl font-semibold tracking-tight text-white sm:text-3xl"
+            >
+              Build with representative data without exposing original records.
+            </h2>
+            <div class="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+              <a href="/login" data-app-route class="sv-btn sv-btn-primary w-full sm:w-auto">
+                Start with SynthVault
+              </a>
+              <a
+                href="/login"
+                data-app-route
+                class="sv-btn w-full text-white ring-1 ring-inset ring-white/40 hover:bg-white/10 sm:w-auto"
+              >
+                View Dashboard
+              </a>
+            </div>
+            <p class="mt-4 text-sm text-slate-300">
+              Create an account, upload a CSV and read the privacy report for your own data.
+            </p>
+          </div>
+        </section>
+      </main>
+
+      <!-- ---------------- 8. FOOTER ---------------- -->
+      <footer class="border-t border-slate-200 bg-white">
+        <div class="sv-shell py-10">
+          <div class="flex flex-col gap-8 sm:flex-row sm:items-start sm:justify-between">
+            <div>
+              <span class="flex items-center gap-2">
+                <span
+                  aria-hidden="true"
+                  class="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-700 text-sm font-bold text-white"
+                >
+                  SV
+                </span>
+                <span class="text-lg font-semibold tracking-tight text-slate-900">SynthVault</span>
+              </span>
+              <p class="mt-2 max-w-sm text-sm text-slate-600">
+                Privacy-Preserving Synthetic Data Platform
+              </p>
+            </div>
+
+            <nav aria-label="Footer" class="flex flex-col gap-2 sm:items-end">
+              <a href="/login" data-app-route class="sv-link text-sm">Sign in</a>
+              <a href="/dashboard" data-app-route class="sv-link text-sm">Dashboard</a>
+              <a href="#how-it-works" class="sv-link text-sm">How It Works</a>
+              <a href="#security" class="sv-link text-sm">Security</a>
+              <a href="#technology" class="sv-link text-sm">Technology</a>
+            </nav>
+          </div>
+
+          <div class="mt-8 flex flex-col gap-2 border-t border-slate-200 pt-6 text-sm text-slate-500 sm:flex-row sm:items-center sm:justify-between">
+            <p>&copy; 2026 SynthVault. All rights reserved.</p>
+            <p>Privacy-Preserving Synthetic Data Platform</p>
+          </div>
+        </div>
+      </footer>
+      <script>
+        /* Plain JavaScript, no libraries and no network calls.
+           1. Native mobile menu (open/close, Escape, close on link click).
+           2. Links that lead into the React application (/login, /dashboard) are
+              intercepted so a double-clicked static file never lands on a
+              "file not found" page - a notice explains how to run the app. */
+        (function () {
+          var menuButton = document.querySelector('[data-mobile-menu-button]');
+          var mobileNav = document.querySelector('[data-mobile-nav]');
+          var menuIcon = document.querySelector('[data-mobile-menu-icon]');
+          var menuLabel = document.querySelector('[data-mobile-menu-label]');
+          var menuOpen = false;
+
+          var ICON_OPEN = 'M3 5h14v2H3V5Zm0 4h14v2H3V9Zm0 4h14v2H3v-2Z';
+          var ICON_CLOSE =
+            'M5.3 4.3 4 5.6 8.4 10 4 14.4 5.3 15.7 9.7 11.3 14.1 15.7 15.4 14.4 11 10 15.4 5.6 14.1 4.3 9.7 8.7 5.3 4.3Z';
+
+          function setMenu(open) {
+            menuOpen = open;
+            if (!mobileNav) {
+              return;
+            }
+            mobileNav.hidden = !open;
+            if (menuButton) {
+              menuButton.setAttribute('aria-expanded', open ? 'true' : 'false');
+            }
+            if (menuIcon) {
+              menuIcon.setAttribute('d', open ? ICON_CLOSE : ICON_OPEN);
+            }
+            if (menuLabel) {
+              menuLabel.textContent = open ? 'Close navigation menu' : 'Open navigation menu';
+            }
+          }
+
+          if (menuButton) {
+            menuButton.addEventListener('click', function () {
+              setMenu(!menuOpen);
+            });
+          }
+
+          document.addEventListener('keydown', function (event) {
+            if (event.key === 'Escape' && menuOpen) {
+              setMenu(false);
+              if (menuButton) {
+                menuButton.focus();
+              }
+            }
+          });
+
+          Array.prototype.forEach.call(
+            document.querySelectorAll('[data-mobile-nav-link]'),
+            function (link) {
+              link.addEventListener('click', function () {
+                setMenu(false);
+              });
+            }
+          );
+
+          var noticeWrap = document.querySelector('[data-offline-notice-wrap]');
+          function showNotice() {
+            if (!noticeWrap) {
+              return;
+            }
+            noticeWrap.hidden = false;
+            var heading = noticeWrap.querySelector('p.font-semibold');
+            if (heading) {
+              heading.setAttribute('tabindex', '-1');
+              heading.focus();
+            }
+          }
+
+          Array.prototype.forEach.call(document.querySelectorAll('[data-app-route]'), function (link) {
+            link.addEventListener('click', function (event) {
+              event.preventDefault();
+              showNotice();
+            });
+          });
+
+          var noticeClose = document.querySelector('[data-offline-notice-close]');
+          if (noticeClose) {
+            noticeClose.addEventListener('click', function () {
+              if (noticeWrap) {
+                noticeWrap.hidden = true;
+              }
+            });
+          }
+        })();
+      </script>
+
+    </div>
+  </body>
+</html>

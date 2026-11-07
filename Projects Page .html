@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Projects - SynthVault</title>
+<style>
+  /* ===== Self-contained styles (no external CDNs) ===== */
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #f8fafc; color: #1e293b; font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: inherit; } button { font-family: inherit; }
+  .sv-btn { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; border-radius: .5rem; padding: .625rem 1rem; font-size: .875rem; font-weight: 600; border: 1px solid transparent; cursor: pointer; transition: background-color .15s, color .15s; text-decoration: none; }
+  .sv-btn-primary { background: #4338ca; color: #fff; } .sv-btn-primary:hover { background: #312e81; }
+  .sv-btn-secondary { border-color: #cbd5e1; background: #fff; color: #334155; } .sv-btn-secondary:hover { background: #f1f5f9; }
+  .sv-btn-danger { background: #b91c1c; color: #fff; } .sv-btn-danger:hover { background: #991b1b; }
+  .btn-danger-ghost { border-color: #fecaca !important; color: #b91c1c !important; } .btn-danger-ghost:hover { background: #fef2f2 !important; }
+  .sv-btn:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible { outline: 2px solid #4f46e5; outline-offset: 2px; border-radius: .25rem; }
+  .sv-card { background: #fff; border: 1px solid #e2e8f0; border-radius: .75rem; padding: 1.5rem; box-shadow: 0 1px 2px rgba(15,23,42,.05); }
+  .sv-link { color: #4338ca; font-weight: 500; text-decoration: none; } .sv-link:hover { text-decoration: underline; }
+  .banner { background: #fff7ed; border-bottom: 1px solid #fdba74; color: #9a3412; padding: .55rem 1rem; font-size: .75rem; line-height: 1.45; text-align: center; }
+  .shell { max-width: 1200px; margin: 0 auto; padding: 1.5rem 1rem 3rem; display: flex; gap: 2rem; }
+  .sidebar { display: none; width: 15rem; flex: none; } .main { flex: 1; min-width: 0; }
+  .brand { display: flex; align-items: center; gap: .5rem; text-decoration: none; }
+  .brand-mark { display: flex; height: 2rem; width: 2rem; align-items: center; justify-content: center; border-radius: .5rem; background: #4338ca; color: #fff; font-size: .8125rem; font-weight: 700; }
+  .brand-name { font-size: 1.125rem; font-weight: 600; letter-spacing: -.01em; }
+  .topbar { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #e2e8f0; background: #fff; padding: .75rem 1rem; margin: -1.5rem -1rem 1.5rem; }
+  .nav ul { list-style: none; margin: 1rem 0; padding: 0; } .nav li + li { margin-top: .25rem; }
+  .nav a { display: block; border-radius: .5rem; padding: .5rem .75rem; font-size: .875rem; font-weight: 500; color: #334155; text-decoration: none; }
+  .nav a:hover { background: #f1f5f9; color: #0f172a; } .nav a[aria-current="page"] { background: #eef2ff; color: #3730a3; }
+  .user-block { border: 1px solid #e2e8f0; background: #f8fafc; border-radius: .5rem; padding: .75rem; }
+  .user-name { margin: 0; font-size: .875rem; font-weight: 600; color: #0f172a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .user-email { margin: .125rem 0 0; font-size: .75rem; color: #64748b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .user-role { display: inline-flex; margin-top: .375rem; border: 1px solid #cbd5e1; background: #fff; border-radius: 9999px; padding: .1rem .5rem; font-size: .7rem; font-weight: 500; color: #475569; }
+  .page-head { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: 1.5rem; }
+  .page-title { margin: 0; font-size: 1.5rem; font-weight: 600; letter-spacing: -.01em; color: #0f172a; }
+  .page-sub { margin: .25rem 0 0; font-size: .875rem; color: #475569; }
+  .page-actions { display: flex; flex-wrap: wrap; gap: .5rem; }
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+  .menu-btn { display: inline-flex; } .mobile-nav { display: none; border-top: 1px solid #e2e8f0; background: #fff; padding: .75rem 1rem; margin: -1.5rem -1rem 1.5rem; }
+  .mobile-nav.open { display: block; }
+  @media (min-width: 1024px) { .sidebar { display: block; } .topbar { display: none; } .mobile-nav { display: none !important; } .shell { padding: 1.5rem 2rem 3rem; } }
+  .sv-input { display: block; width: 100%; border: 1px solid #cbd5e1; border-radius: .5rem; padding: .5rem .75rem; font-size: .875rem; color: #0f172a; background: #fff; }
+  .sv-label { display: block; margin-bottom: .25rem; font-size: .875rem; font-weight: 500; color: #334155; }
+  .table-wrap { display: none; }
+  .cards-list { list-style: none; margin: 0; padding: 0; display: grid; gap: .75rem; }
+  @media (min-width: 768px) { .table-wrap { display: block; } .cards-list { display: none; } }
+  .table-wrap table { min-width: 640px; }
+  .cell-name { font-weight: 600; color: #0f172a; }
+  .cell-desc { color: #475569; max-width: 16rem; }
+  .row-actions { display: flex; flex-wrap: wrap; gap: .4rem; }
+  .btn-sm { padding: .375rem .75rem; font-size: .75rem; }
+  .count-line { margin: 0; font-size: .875rem; color: #475569; }
+  .filter-row { display: flex; flex-direction: column; gap: .5rem; margin-bottom: 1rem; }
+  @media (min-width: 640px) { .filter-row { flex-direction: row; align-items: center; justify-content: space-between; } .filter-row .sv-input { width: 16rem; } }
+  .cards-list h3 { margin: 0; font-size: 1rem; font-weight: 600; color: #0f172a; }
+  .card-desc { margin: .25rem 0 0; font-size: .875rem; color: #475569; }
+  .card-meta { margin: .5rem 0 0; font-size: .75rem; color: #64748b; }
+  .empty-state { border: 1px dashed #cbd5e1; border-radius: .5rem; padding: 1.5rem; text-align: center; font-size: .875rem; color: #475569; }
+  .modal-backdrop { position: fixed; inset: 0; z-index: 50; display: flex; align-items: flex-end; justify-content: center; padding: 1rem; background: rgba(15,23,42,.5); }
+  @media (min-width: 640px) { .modal-backdrop { align-items: center; } }
+  .modal { position: relative; z-index: 10; width: 100%; max-width: 28rem; max-height: 90vh; overflow: auto; background: #fff; border: 1px solid #e2e8f0; border-radius: .75rem; padding: 1.5rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,.12); outline: none; }
+  .modal-title { margin: 0; font-size: 1.05rem; font-weight: 600; color: #0f172a; }
+  .modal-desc { margin: .25rem 0 0; font-size: .875rem; color: #475569; }
+  .modal-actions { display: flex; flex-direction: column-reverse; gap: .5rem; margin-top: 1.25rem; }
+  @media (min-width: 640px) { .modal-actions { flex-direction: row; justify-content: flex-end; } }
+  .field-error { margin-top: .25rem; font-size: .75rem; color: #b91c1c; }
+  .char-count { margin-top: .25rem; font-size: .75rem; color: #94a3b8; }
+  .alert { display: flex; gap: .75rem; border: 1px solid; border-radius: .5rem; padding: 1rem; font-size: .875rem; }
+  .alert .ico { display: flex; height: 1.25rem; width: 1.25rem; flex: none; align-items: center; justify-content: center; border-radius: 9999px; border: 1px solid currentColor; font-size: .7rem; font-weight: 700; margin-top: .1rem; }
+  .alert-success { border-color: #6ee7b7; background: #ecfdf5; color: #065f46; }
+  .alert-warning { border-color: #fcd34d; background: #fffbeb; color: #92400e; }
+  .notice-area { margin-bottom: 1rem; }
+  .quick-actions { display: flex; flex-direction: column; gap: .5rem; }
+  .quick-actions .sv-btn, .quick-actions .sv-btn { width: 100%; }
+  @media (min-width: 640px) { .quick-actions { flex-direction: row; } .quick-actions .sv-btn { width: auto; } }
+  .footnote { margin: 1rem 0 0; font-size: .75rem; color: #94a3b8; }
+</style>
+
+</head>
+<body>
+<div class="banner">
+  <strong>STATIC OFFLINE PREVIEW — PAGE 4 (PROJECTS)</strong> — sample values for visual verification. Create, edit, delete and filter work here on <strong>in-memory sample rows only</strong>; the production app persists everything through the Spring Boot REST API (GET/POST/PUT/DELETE /api/projects) with zero mock data.
+</div>
+
+<header class="topbar">
+  <a class="brand" href="Dashboard page .html"><span class="brand-mark">SV</span><span class="brand-name">SynthVault</span></a>
+  <button type="button" id="menuBtn" class="sv-btn sv-btn-secondary menu-btn" aria-expanded="false" aria-controls="mobileNav">
+    <span class="sr-only">Toggle navigation menu</span>
+    <svg viewBox="0 0 20 20" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M3 5h14v2H3V5Zm0 4h14v2H3V9Zm0 4h14v2H3v-2Z"/></svg>
+  </button>
+</header>
+<nav id="mobileNav" class="mobile-nav" aria-label="Application">
+  <ul class="nav" style="margin:0">
+    <li><a href="Dashboard page .html">Dashboard</a></li>
+    <li><a href="#" aria-current="page">Projects</a></li>
+  </ul>
+</nav>
+
+<div class="shell">
+  <aside class="sidebar">
+    <div style="position:sticky;top:1.5rem">
+      <a class="brand" href="Dashboard page .html"><span class="brand-mark">SV</span><span class="brand-name">SynthVault</span></a>
+      <nav class="nav" aria-label="Application">
+        <ul>
+          <li><a href="Dashboard page .html">Dashboard</a></li>
+          <li><a href="#" aria-current="page">Projects</a></li>
+        </ul>
+      </nav>
+      <div class="user-block">
+        <p class="user-name">Prathip Kumar</p>
+        <p class="user-email">prathip@example.com</p>
+        <span class="user-role">USER</span>
+        <button type="button" class="sv-btn sv-btn-secondary" style="margin-top:.75rem;width:100%;padding:.5rem;font-size:.75rem">Sign out</button>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main" id="main-content">
+    <div class="page-head">
+      <div>
+        <h1 class="page-title">Projects</h1>
+        <p class="page-sub">Organize datasets and synthetic-data workflows by project.</p>
+      </div>
+      <div class="page-actions">
+        <button type="button" id="newProjectBtn" class="sv-btn sv-btn-primary">+ New Project</button>
+      </div>
+    </div>
+
+    <div id="pageNotice" class="notice-area" aria-live="polite"></div>
+
+    <div class="sv-card">
+      <div class="filter-row">
+        <p id="projCount" class="count-line" aria-live="polite">0 of 0 projects</p>
+        <div>
+          <label for="projFilter" class="sr-only">Filter projects by name or description</label>
+          <input id="projFilter" type="search" class="sv-input" placeholder="Filter projects..." />
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <caption class="sr-only">Your projects</caption>
+          <thead>
+            <tr><th>Project</th><th>Description</th><th>Datasets</th><th>Created</th><th>Actions</th></tr>
+          </thead>
+          <tbody id="projRows"></tbody>
+        </table>
+      </div>
+
+      <ul id="projCards" class="cards-list"></ul>
+    </div>
+
+    <p class="footnote">Static offline preview generated for visual verification · SynthVault MCA Project</p>
+  </main>
+</div>
+
+<div class="modal-backdrop" id="formBackdrop" style="display:none">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="formTitle" tabindex="-1" id="formModal">
+    <h2 class="modal-title" id="formTitle">New project</h2>
+    <p class="modal-desc" id="formDesc">Projects group your datasets and synthetic-data workflows.</p>
+    <div style="margin-top:1rem">
+      <label class="sv-label" for="projName">Name <span aria-hidden="true" style="color:#dc2626">*</span></label>
+      <input id="projName" type="text" class="sv-input" maxlength="100" placeholder="e.g. Hospital discharge records" />
+      <p id="nameError" class="field-error" style="display:none" role="alert"></p>
+      <p id="nameCount" class="char-count">0/100 characters</p>
+      <div style="margin-top:1rem">
+        <label class="sv-label" for="projDesc">Description <span style="font-weight:400;color:#64748b">(optional)</span></label>
+        <textarea id="projDesc" rows="3" class="sv-input" placeholder="What this project contains and who it is for."></textarea>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button type="button" class="sv-btn sv-btn-secondary" id="formCancel">Cancel</button>
+      <button type="button" class="sv-btn sv-btn-primary" id="formSubmit">Create project</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="delBackdrop" style="display:none">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="delTitle" tabindex="-1" id="delModal">
+    <h2 class="modal-title" id="delTitle">Delete project</h2>
+    <p class="modal-desc" id="delDesc"></p>
+    <div class="modal-actions">
+      <button type="button" class="sv-btn sv-btn-secondary" id="delCancel">Cancel</button>
+      <button type="button" class="sv-btn sv-btn-danger" id="delConfirm">Delete project</button>
+    </div>
+  </div>
+</div>
+<script>
+(function () {
+  /* In-memory sample rows (static preview only). */
+  var projects = [
+    { id: 1, name: 'Hospital Records Project', description: 'Patient discharge records for the privacy pilot.', datasets: 2, created: '18 Sep 2026' },
+    { id: 2, name: 'College Analytics', description: 'Student marks and attendance datasets.', datasets: 2, created: '12 Sep 2026' },
+    { id: 3, name: 'Retail Sales 2026', description: 'Store-level sales and vendor contact datasets.', datasets: 1, created: '30 Aug 2026' }
+  ];
+  var nextId = 4, editingId = null, deletingId = null, query = '';
+  var rowsEl = document.getElementById('projRows'), cardsEl = document.getElementById('projCards');
+  var countEl = document.getElementById('projCount'), noticeEl = document.getElementById('pageNotice');
+
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function filtered() {
+    var q = query.trim().toLowerCase();
+    if (!q) { return projects; }
+    return projects.filter(function (p) {
+      return p.name.toLowerCase().indexOf(q) > -1 || (p.description || '').toLowerCase().indexOf(q) > -1;
+    });
+  }
+  function render() {
+    var list = filtered();
+    countEl.textContent = list.length + ' of ' + projects.length + ' project' + (projects.length === 1 ? '' : 's');
+    rowsEl.innerHTML = list.map(function (p) {
+      return '<tr><td class="cell-name">' + esc(p.name) + '</td><td class="cell-desc">' + esc(p.description || '-') +
+        '</td><td>' + p.datasets + '</td><td>' + esc(p.created) + '</td><td><div class="row-actions">' +
+        '<a class="sv-btn sv-btn-secondary btn-sm" href="Dataset Upload + Schema page .Html">Open</a>' +
+        '<button type="button" class="sv-btn sv-btn-secondary btn-sm" data-edit="' + p.id + '">Edit</button>' +
+        '<button type="button" class="sv-btn sv-btn-secondary btn-sm btn-danger-ghost" data-del="' + p.id + '">Delete</button></div></td></tr>';
+    }).join('');
+    cardsEl.innerHTML = list.length === 0
+      ? '<li class="empty-state">No projects match your filter. Clear the search box to see all projects.</li>'
+      : list.map(function (p) {
+          return '<li class="sv-card"><h3>' + esc(p.name) + '</h3>' +
+            (p.description ? '<p class="card-desc">' + esc(p.description) + '</p>' : '') +
+            '<p class="card-meta">' + p.datasets + ' dataset' + (p.datasets === 1 ? '' : 's') + ' · created ' + esc(p.created) + '</p>' +
+            '<div class="quick-actions" style="margin-top:.75rem">' +
+            '<a class="sv-btn sv-btn-primary" href="Dataset Upload + Schema page .Html">Open</a>' +
+            '<button type="button" class="sv-btn sv-btn-secondary" data-edit="' + p.id + '">Edit</button>' +
+            '<button type="button" class="sv-btn sv-btn-secondary btn-danger-ghost" data-del="' + p.id + '">Delete</button></div></li>';
+        }).join('');
+  }
+  function showNotice(tone, title, message) {
+    noticeEl.innerHTML = '<div class="alert alert-' + tone + '" role="status"><span class="ico" aria-hidden="true">' +
+      (tone === 'success' ? '✓' : '!') + '</span><div><p style="margin:0;font-weight:600">' + esc(title) +
+      '</p><p style="margin:.15rem 0 0">' + esc(message) + '</p></div></div>';
+  }
+  function byId(id) { for (var i = 0; i < projects.length; i++) { if (projects[i].id === id) { return projects[i]; } } return null; }
+
+  /* ---- Form modal (create / edit) ---- */
+  var formBackdrop = document.getElementById('formBackdrop'), formModal = document.getElementById('formModal');
+  var nameInput = document.getElementById('projName'), descInput = document.getElementById('projDesc');
+  var nameError = document.getElementById('nameError'), nameCount = document.getElementById('nameCount');
+  function updateCount() { nameCount.textContent = nameInput.value.length + '/100 characters'; }
+  function openForm(project) {
+    editingId = project ? project.id : null;
+    document.getElementById('formTitle').textContent = project ? 'Edit project' : 'New project';
+    document.getElementById('formDesc').textContent = project ? 'Update the name or description of this project.' : 'Projects group your datasets and synthetic-data workflows.';
+    document.getElementById('formSubmit').textContent = project ? 'Save changes' : 'Create project';
+    nameInput.value = project ? project.name : '';
+    descInput.value = project && project.description ? project.description : '';
+    nameError.style.display = 'none'; updateCount();
+    formBackdrop.style.display = 'flex'; formModal.focus();
+  }
+  function closeForm() { formBackdrop.style.display = 'none'; editingId = null; }
+  nameInput.addEventListener('input', function () { nameError.style.display = 'none'; updateCount(); });
+  document.getElementById('newProjectBtn').addEventListener('click', function () { openForm(null); });
+  document.getElementById('formCancel').addEventListener('click', closeForm);
+  formBackdrop.addEventListener('mousedown', function (e) { if (e.target === formBackdrop) { closeForm(); } });
+  document.getElementById('formSubmit').addEventListener('click', function () {
+    var name = nameInput.value.trim();
+    if (!name) { nameError.textContent = 'Project name is required'; nameError.style.display = 'block'; return; }
+    if (name.length > 100) { nameError.textContent = 'Project name must be at most 100 characters'; nameError.style.display = 'block'; return; }
+    if (editingId !== null) {
+      var p = byId(editingId); p.name = name; p.description = descInput.value.trim();
+      showNotice('success', 'Project updated', 'Your changes were saved.');
+    } else {
+      projects.push({ id: nextId++, name: name, description: descInput.value.trim(), datasets: 0, created: 'Just now' });
+      showNotice('success', 'Project created', '"' + name + '" is ready.');
+    }
+    closeForm(); render();
+  });
+
+  /* ---- Delete modal ---- */
+  var delBackdrop = document.getElementById('delBackdrop'), delModal = document.getElementById('delModal');
+  var deletingTarget = null;
+  document.body.addEventListener('click', function (e) {
+    var t = e.target;
+    if (t.getAttribute && t.getAttribute('data-edit')) { openForm(byId(Number(t.getAttribute('data-edit')))); }
+    if (t.getAttribute && t.getAttribute('data-del')) {
+      deletingTarget = Number(t.getAttribute('data-del'));
+      var p = byId(deletingTarget);
+      document.getElementById('delDesc').textContent = 'Delete "' + p.name + '"? All of its datasets, analyses and generated data will also be removed. This cannot be undone.';
+      delBackdrop.style.display = 'flex'; delModal.focus();
+    }
+  });
+  function closeDelete() { delBackdrop.style.display = 'none'; deletingTarget = null; }
+  document.getElementById('delCancel').addEventListener('click', closeDelete);
+  delBackdrop.addEventListener('mousedown', function (e) { if (e.target === delBackdrop) { closeDelete(); } });
+  document.getElementById('delConfirm').addEventListener('click', function () {
+    var p = byId(deletingTarget);
+    projects = projects.filter(function (x) { return x.id !== deletingTarget; });
+    closeDelete();
+    showNotice('success', 'Project deleted', '"' + p.name + '" and its datasets were removed.');
+    render();
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') {
+      if (formBackdrop.style.display === 'flex') { closeForm(); }
+      if (delBackdrop.style.display === 'flex') { closeDelete(); }
+    }
+  });
+
+  document.getElementById('projFilter').addEventListener('input', function (e) { query = e.target.value; render(); });
+
+  /* ---- Mobile nav ---- */
+  var menuBtn = document.getElementById('menuBtn'), mobileNav = document.getElementById('mobileNav');
+  menuBtn.addEventListener('click', function () {
+    var open = mobileNav.classList.toggle('open');
+    menuBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { mobileNav.classList.remove('open'); } });
+
+  render();
+})();
+
+</script>
+
+
+
+</body>
+</html>

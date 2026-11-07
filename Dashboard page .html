@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Dashboard - SynthVault</title>
+<style>
+  /* ===== Self-contained styles (no external CDNs) ===== */
+  :root { color-scheme: light; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #f8fafc; color: #1e293b; font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: inherit; }
+  button { font-family: inherit; }
+
+  .sv-btn { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; border-radius: .5rem; padding: .625rem 1rem; font-size: .875rem; font-weight: 600; border: 1px solid transparent; cursor: pointer; transition: background-color .15s ease, color .15s ease; text-decoration: none; }
+  .sv-btn-primary { background: #4338ca; color: #fff; }
+  .sv-btn-primary:hover { background: #312e81; }
+  .sv-btn-secondary { border-color: #cbd5e1; background: #fff; color: #334155; }
+  .sv-btn-secondary:hover { background: #f1f5f9; }
+  .sv-btn:focus-visible, a:focus-visible, button:focus-visible { outline: 2px solid #4f46e5; outline-offset: 2px; border-radius: .25rem; }
+  .sv-card { background: #fff; border: 1px solid #e2e8f0; border-radius: .75rem; padding: 1.5rem; box-shadow: 0 1px 2px rgba(15,23,42,.05); }
+  .sv-link { color: #4338ca; font-weight: 500; text-decoration: none; }
+  .sv-link:hover { text-decoration: underline; }
+
+  .banner { background: #fff7ed; border-bottom: 1px solid #fdba74; color: #9a3412; padding: .55rem 1rem; font-size: .75rem; line-height: 1.4; text-align: center; }
+  .shell { max-width: 1200px; margin: 0 auto; padding: 1.5rem 1rem 3rem; display: flex; gap: 2rem; }
+  .sidebar { display: none; width: 15rem; flex: none; }
+  .main { flex: 1; min-width: 0; }
+
+  .brand { display: flex; align-items: center; gap: .5rem; text-decoration: none; }
+  .brand-mark { display: flex; height: 2rem; width: 2rem; align-items: center; justify-content: center; border-radius: .5rem; background: #4338ca; color: #fff; font-size: .8125rem; font-weight: 700; }
+  .brand-name { font-size: 1.125rem; font-weight: 600; letter-spacing: -.01em; }
+
+  .topbar { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #e2e8f0; background: #fff; padding: .75rem 1rem; margin: -1.5rem -1rem 1.5rem; }
+  .nav ul { list-style: none; margin: 1rem 0; padding: 0; }
+  .nav li + li { margin-top: .25rem; }
+  .nav a { display: block; border-radius: .5rem; padding: .5rem .75rem; font-size: .875rem; font-weight: 500; color: #334155; text-decoration: none; }
+  .nav a:hover { background: #f1f5f9; color: #0f172a; }
+  .nav a[aria-current="page"] { background: #eef2ff; color: #3730a3; }
+  .user-block { border: 1px solid #e2e8f0; background: #f8fafc; border-radius: .5rem; padding: .75rem; }
+  .user-name { margin: 0; font-size: .875rem; font-weight: 600; color: #0f172a; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .user-email { margin: .125rem 0 0; font-size: .75rem; color: #64748b; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .user-role { display: inline-flex; margin-top: .375rem; border: 1px solid #cbd5e1; background: #fff; border-radius: 9999px; padding: .1rem .5rem; font-size: .7rem; font-weight: 500; color: #475569; }
+
+  .page-head { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: 1.5rem; }
+  .page-title { margin: 0; font-size: 1.5rem; font-weight: 600; letter-spacing: -.01em; color: #0f172a; }
+  .page-sub { margin: .25rem 0 0; font-size: .875rem; color: #475569; }
+  .page-actions { display: flex; flex-wrap: wrap; gap: .5rem; }
+
+  .kpi-grid { display: grid; gap: 1rem; grid-template-columns: 1fr; }
+  .kpi-label { margin: 0; font-size: .875rem; font-weight: 500; color: #475569; }
+  .kpi-value { margin: .5rem 0 0; font-size: 1.875rem; font-weight: 600; letter-spacing: -.02em; color: #0f172a; }
+  .kpi-note { margin: .5rem 0 0; font-size: .75rem; color: #64748b; }
+  @media (min-width: 640px) { .kpi-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1280px) { .kpi-grid { grid-template-columns: repeat(4, 1fr); } }
+  @media (min-width: 1024px) {
+    .sidebar { display: block; }
+    .topbar { display: none; }
+    .shell { padding: 1.5rem 2rem 3rem; }
+  }
+  .duo { display: grid; gap: 1.5rem; margin-top: 1.5rem; }
+  @media (min-width: 1024px) { .duo { grid-template-columns: repeat(2, 1fr); align-items: start; } }
+  .section-title { margin: 0; font-size: 1rem; font-weight: 600; color: #0f172a; }
+  .section-note { margin: .15rem 0 0; font-size: .75rem; color: #64748b; }
+  .card-head { display: flex; align-items: center; justify-content: space-between; gap: .75rem; flex-wrap: wrap; }
+  .activity { list-style: none; margin: .5rem 0 0; padding: 0; }
+  .activity li { display: flex; align-items: flex-start; gap: .75rem; padding: .75rem 0; border-top: 1px solid #f1f5f9; }
+  .activity li:first-child { border-top: 0; }
+  .activity-icon { display: flex; height: 2rem; width: 2rem; flex: none; align-items: center; justify-content: center; border-radius: .5rem; font-size: .75rem; font-weight: 700; }
+  .icon-project { background: #eef2ff; color: #3730a3; }
+  .icon-dataset { background: #f1f5f9; color: #334155; }
+  .activity-title { margin: 0; font-size: .875rem; font-weight: 600; color: #0f172a; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .activity-detail { margin: .1rem 0 0; font-size: .75rem; color: #475569; }
+  .activity-time { margin: .15rem 0 0; font-size: .75rem; color: #94a3b8; }
+  .activity-action { margin-left: auto; flex: none; border-color: #cbd5e1; background: #fff; color: #334155; padding: .375rem .75rem; font-size: .75rem; }
+  .activity-action:hover { background: #f1f5f9; }
+
+  .risk-row { margin-top: .75rem; }
+  .risk-line { display: flex; align-items: center; justify-content: space-between; gap: .75rem; font-size: .875rem; }
+  .risk-badge { display: inline-flex; align-items: center; border-radius: 9999px; border: 1px solid; padding: .1rem .55rem; font-size: .75rem; font-weight: 600; }
+  .risk-low { border-color: #6ee7b7; background: #ecfdf5; color: #065f46; }
+  .risk-medium { border-color: #fcd34d; background: #fffbeb; color: #92400e; }
+  .risk-high { border-color: #fdba74; background: #fff7ed; color: #9a3412; }
+  .risk-critical { border-color: #fca5a5; background: #fef2f2; color: #991b1b; }
+  .risk-count { color: #334155; }
+  .risk-track { margin-top: .3rem; height: .5rem; width: 100%; overflow: hidden; border-radius: .25rem; background: #f1f5f9; }
+  .risk-fill { height: 100%; border-radius: .25rem; }
+  .fill-low { background: #10b981; } .fill-medium { background: #f59e0b; } .fill-high { background: #f97316; } .fill-critical { background: #ef4444; }
+
+  .quick-actions { display: flex; flex-direction: column; gap: .75rem; margin-top: 1rem; }
+  .quick-actions .sv-btn { width: 100%; }
+  @media (min-width: 640px) { .quick-actions { flex-direction: row; } .quick-actions .sv-btn { width: auto; } }
+  .footnote { margin: 1rem 0 0; font-size: .75rem; color: #94a3b8; }
+
+  .menu-btn { display: inline-flex; }
+  .mobile-nav { display: none; border-top: 1px solid #e2e8f0; padding: .75rem 1rem; background: #fff; margin: -1.5rem -1rem 1.5rem; }
+  .mobile-nav.open { display: block; }
+  @media (min-width: 1024px) { .menu-btn { display: none; } .mobile-nav { display: none !important; } }
+</style>
+
+</head>
+<body>
+<div class="banner">
+  <strong>STATIC OFFLINE PREVIEW</strong> — the values below are clearly-labelled sample data for visual verification only.
+  The real SynthVault Dashboard fetches every figure live from the Spring Boot API (GET /api/projects and related endpoints) and ships with zero mock data.
+</div>
+
+<header class="topbar">
+  <a class="brand" href="#"><span class="brand-mark">SV</span><span class="brand-name">SynthVault</span></a>
+  <button type="button" id="menuBtn" class="sv-btn sv-btn-secondary menu-btn" aria-expanded="false" aria-controls="mobileNav">
+    <span class="sr-only">Toggle navigation menu</span>
+    <svg viewBox="0 0 20 20" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M3 5h14v2H3V5Zm0 4h14v2H3V9Zm0 4h14v2H3v-2Z"/></svg>
+  </button>
+</header>
+<nav id="mobileNav" class="mobile-nav" aria-label="Application">
+  <ul class="nav" style="margin:0">
+    <li><a href="#" aria-current="page">Dashboard</a></li>
+    <li><a href="#">Projects</a></li>
+  </ul>
+</nav>
+
+<div class="shell">
+  <aside class="sidebar">
+    <div style="position:sticky;top:1.5rem">
+      <a class="brand" href="#"><span class="brand-mark">SV</span><span class="brand-name">SynthVault</span></a>
+      <nav class="nav" aria-label="Application">
+        <ul>
+          <li><a href="#" aria-current="page">Dashboard</a></li>
+          <li><a href="#">Projects</a></li>
+        </ul>
+      </nav>
+      <div class="user-block">
+        <p class="user-name">Prathip Kumar</p>
+        <p class="user-email">prathip@example.com</p>
+        <span class="user-role">USER</span>
+        <button type="button" class="sv-btn sv-btn-secondary" style="margin-top:.75rem;width:100%;padding:.5rem;font-size:.75rem">Sign out</button>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main" id="main-content">
+    <div class="page-head">
+      <div>
+        <h1 class="page-title">Welcome back, Prathip</h1>
+        <p class="page-sub">Monitor your SynthVault workspace.</p>
+      </div>
+      <div class="page-actions">
+        <button type="button" class="sv-btn sv-btn-primary">Upload dataset</button>
+      </div>
+    </div>
+
+    <section aria-labelledby="kpi-heading">
+      <h2 id="kpi-heading" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Key figures</h2>
+      <div class="kpi-grid">
+        <div class="sv-card">
+          <p class="kpi-label">Projects</p>
+          <p class="kpi-value">3</p>
+          <p class="kpi-note">Workspaces you own.</p>
+        </div>
+        <div class="sv-card">
+          <p class="kpi-label">Datasets</p>
+          <p class="kpi-value">5</p>
+          <p class="kpi-note">CSV files analyzed across all projects.</p>
+        </div>
+        <div class="sv-card">
+          <p class="kpi-label">Rows ingested</p>
+          <p class="kpi-value">12,480</p>
+          <p class="kpi-note">Total data rows across uploaded datasets.</p>
+        </div>
+        <div class="sv-card">
+          <p class="kpi-label">Avg privacy risk score</p>
+          <p class="kpi-value">62/100</p>
+          <p class="kpi-note">Lower is safer. From dataset privacy reports.</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="duo">
+      <section class="sv-card" aria-labelledby="activity-heading">
+        <div class="card-head">
+          <h2 class="section-title" id="activity-heading">Recent Activity</h2>
+          <a class="sv-link" style="font-size:.875rem" href="#">View projects</a>
+        </div>
+        <ul class="activity">
+          <li>
+            <span class="activity-icon icon-dataset" aria-hidden="true">D</span>
+            <div style="min-width:0">
+              <p class="activity-title">patients.csv</p>
+              <p class="activity-detail">Uploaded to Hospital Records Project</p>
+              <p class="activity-time">20 Sep 2026, 10:24 · processed</p>
+            </div>
+            <button type="button" class="sv-btn sv-btn-secondary activity-action">View privacy</button>
+          </li>
+          <li>
+            <span class="activity-icon icon-dataset" aria-hidden="true">D</span>
+            <div style="min-width:0">
+              <p class="activity-title">student_marks.csv</p>
+              <p class="activity-detail">Uploaded to College Analytics</p>
+              <p class="activity-time">19 Sep 2026, 16:41 · processed</p>
+            </div>
+            <button type="button" class="sv-btn sv-btn-secondary activity-action">View privacy</button>
+          </li>
+          <li>
+            <span class="activity-icon icon-project" aria-hidden="true">P</span>
+            <div style="min-width:0">
+              <p class="activity-title">Retail Sales 2026</p>
+              <p class="activity-detail">Project created</p>
+              <p class="activity-time">18 Sep 2026, 09:12</p>
+            </div>
+            <button type="button" class="sv-btn sv-btn-secondary activity-action">Open project</button>
+          </li>
+          <li>
+            <span class="activity-icon icon-dataset" aria-hidden="true">D</span>
+            <div style="min-width:0">
+              <p class="activity-title">vendor_contacts.csv</p>
+              <p class="activity-detail">Uploaded to Hospital Records Project</p>
+              <p class="activity-time">17 Sep 2026, 14:05 · processed</p>
+            </div>
+            <button type="button" class="sv-btn sv-btn-secondary activity-action">View privacy</button>
+          </li>
+        </ul>
+      </section>
+
+      <div style="display:grid;gap:1.5rem">
+        <section class="sv-card" aria-labelledby="growth-heading">
+          <h2 class="section-title" id="growth-heading">Dataset Growth</h2>
+          <p class="section-note">Cumulative datasets over time, from real upload records.</p>
+          <svg viewBox="0 0 640 200" role="img" aria-label="Cumulative dataset count over time" style="width:100%;margin-top:1rem">
+            <title>Cumulative dataset count over time</title>
+            <g stroke="#e2e8f0" stroke-width="1">
+              <line x1="46" x2="624" y1="14" y2="14"/><line x1="46" x2="624" y1="66" y2="66"/>
+              <line x1="46" x2="624" y1="118" y2="118"/><line x1="46" x2="624" y1="170" y2="170"/>
+            </g>
+            <g font-size="11" fill="#64748b" text-anchor="end">
+              <text x="38" y="18">5</text><text x="38" y="70">3.3</text><text x="38" y="122">1.7</text><text x="38" y="174">0</text>
+            </g>
+            <path d="M 46 170 L 232 145 L 418 93 L 624 14 L 624 170 L 46 170 Z" fill="#c7d2fe" fill-opacity="0.55"/>
+            <path d="M 46 170 L 232 145 L 418 93 L 624 14" fill="none" stroke="#4f46e5" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+            <g fill="#4338ca">
+              <circle cx="46" cy="170" r="3.5"><title>01 Sep: 1</title></circle>
+              <circle cx="232" cy="145" r="3.5"><title>05 Sep: 2</title></circle>
+              <circle cx="418" cy="93" r="3.5"><title>12 Sep: 4</title></circle>
+              <circle cx="624" cy="14" r="3.5"><title>20 Sep: 5</title></circle>
+            </g>
+            <g font-size="11" fill="#64748b">
+              <text x="46" y="192">01 Sep</text><text x="335" y="192" text-anchor="middle">08 Sep</text><text x="624" y="192" text-anchor="end">20 Sep</text>
+            </g>
+          </svg>
+        </section>
+
+        <section class="sv-card" aria-labelledby="risk-heading">
+          <h2 class="section-title" id="risk-heading">Privacy Risk Overview</h2>
+          <div class="risk-row">
+            <div class="risk-line"><span class="risk-badge risk-low">LOW</span><span class="risk-count">1 dataset · 20%</span></div>
+            <div class="risk-track"><div class="risk-fill fill-low" style="width:20%"></div></div>
+          </div>
+          <div class="risk-row">
+            <div class="risk-line"><span class="risk-badge risk-medium">MEDIUM</span><span class="risk-count">2 datasets · 40%</span></div>
+            <div class="risk-track"><div class="risk-fill fill-medium" style="width:40%"></div></div>
+          </div>
+          <div class="risk-row">
+            <div class="risk-line"><span class="risk-badge risk-high">HIGH</span><span class="risk-count">1 dataset · 20%</span></div>
+            <div class="risk-track"><div class="risk-fill fill-high" style="width:20%"></div></div>
+          </div>
+          <div class="risk-row">
+            <div class="risk-line"><span class="risk-badge risk-critical">CRITICAL</span><span class="risk-count">1 dataset · 20%</span></div>
+            <div class="risk-track"><div class="risk-fill fill-critical" style="width:20%"></div></div>
+          </div>
+          <p class="footnote">2 of 5 analyzed datasets contain detected personal data columns.</p>
+        </section>
+
+        <section class="sv-card" aria-labelledby="quick-heading">
+          <h2 class="section-title" id="quick-heading">Quick actions</h2>
+          <div class="quick-actions">
+            <button type="button" class="sv-btn sv-btn-primary">Create Project</button>
+            <button type="button" class="sv-btn sv-btn-secondary">Upload Dataset</button>
+          </div>
+        </section>
+      </div>
+
+    </div>
+
+    <p class="footnote">Static offline preview generated for visual verification · SynthVault MCA Project</p>
+  </main>
+</div>
+
+<script>
+  /* Self-contained interactivity: mobile navigation toggle (Escape + outside click close). */
+  (function () {
+    var button = document.getElementById('menuBtn');
+    var panel = document.getElementById('mobileNav');
+    if (!button || !panel) { return; }
+    function setOpen(open) {
+      panel.classList.toggle('open', open);
+      button.setAttribute('aria-expanded', open ? 'true' : 'false');
+    }
+    button.addEventListener('click', function () {
+      setOpen(!panel.classList.contains('open'));
+    });
+    document.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape') { setOpen(false); }
+    });
+    document.addEventListener('click', function (event) {
+      if (panel.classList.contains('open') && !panel.contains(event.target) && !button.contains(event.target)) {
+        setOpen(false);
+      }
+    });
+  })();
+
+  /* ---- demo session on load: show the signed-in user (persists across refresh) ---- */
+  (function () {
+    var raw = null;
+    try {
+      raw = window.sessionStorage.getItem('synthvault.user') ||
+        window.localStorage.getItem('synthvault.user');
+    } catch (storageError) { /* storage blocked: keep the default sample user */ }
+    if (!raw) { return; }
+    var user = null;
+    try { user = JSON.parse(raw); } catch (parseError) { return; }
+    if (!user || !user.email) { return; }
+    var scope = document.getElementById('svpage-dashboard') || document;
+    var heading = scope.querySelector('.page-title');
+    if (heading && /welcome back/i.test(heading.textContent || '')) {
+      heading.textContent = 'Welcome back, ' + String(user.name || user.email).split(' ')[0];
+    }
+    var nameEl = scope.querySelector('.user-name');
+    if (nameEl) { nameEl.textContent = user.name || user.email; }
+    var emailEl = scope.querySelector('.user-email');
+    if (emailEl) { emailEl.textContent = user.email; }
+    if (user.role) {
+      var roleEl = scope.querySelector('.user-role');
+      if (roleEl) { roleEl.textContent = user.role; }
+    }
+    Array.prototype.forEach.call(scope.querySelectorAll('a'), function (link) {
+      if (/^\s*sign out\s*$/i.test(link.textContent || '')) {
+        link.addEventListener('click', function () {
+          try {
+            window.sessionStorage.removeItem('synthvault.user');
+            window.localStorage.removeItem('synthvault.user');
+          } catch (storageError) { /* ignore */ }
+        });
+      }
+    });
+  })();
+</script>
+</body>
+</html>
+

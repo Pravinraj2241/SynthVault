@@ -1,0 +1,86 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * SynthVault design tokens + shared component classes.
+ * Solid colours only (no gradients), Tailwind transitions only.
+ */
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-slate-50 font-sans text-slate-800 antialiased;
+  }
+
+  /* Visible focus state for every interactive element (keyboard access). */
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible,
+  [tabindex]:focus-visible {
+    @apply rounded-sm outline-none ring-2 ring-brand-600 ring-offset-2 ring-offset-white;
+  }
+}
+
+@layer components {
+  /* ---- layout ---- */
+  .sv-shell {
+    @apply mx-auto w-full max-w-shell px-4 sm:px-6 lg:px-8;
+  }
+
+  .sv-card {
+    @apply rounded-xl border border-slate-200 bg-white p-6 shadow-sm;
+  }
+
+  /* ---- buttons ---- */
+  .sv-btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold transition-colors duration-150 disabled:cursor-not-allowed disabled:opacity-60;
+  }
+
+  .sv-btn-primary {
+    @apply bg-brand-700 text-white hover:bg-brand-800 active:bg-brand-900;
+  }
+
+  .sv-btn-secondary {
+    @apply border border-slate-300 bg-white text-slate-700 hover:bg-slate-100;
+  }
+
+  .sv-btn-ghost {
+    @apply text-slate-700 hover:bg-slate-100;
+  }
+
+  /* ---- text ---- */
+  .sv-eyebrow {
+    @apply text-sm font-semibold uppercase tracking-wider text-brand-700;
+  }
+
+  .sv-section-title {
+    @apply text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl;
+  }
+
+  .sv-link {
+    @apply font-medium text-brand-700 underline-offset-4 hover:underline;
+  }
+
+  .sv-chip {
+    @apply inline-flex items-center rounded-full border border-slate-200 bg-white px-3 py-1 text-sm text-slate-700;
+  }
+
+  /* ---- forms (used by the authenticated pages built on top of this base) ---- */
+  .sv-input {
+    @apply block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:border-brand-500;
+  }
+
+  .sv-label {
+    @apply mb-1 block text-sm font-medium text-slate-700;
+  }
+}

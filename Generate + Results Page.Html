@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Generate Synthetic Data - SynthVault</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #f8fafc; color: #1e293b; font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: inherit; } button { font-family: inherit; }
+  .sv-btn { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; border-radius: .5rem; padding: .625rem 1rem; font-size: .875rem; font-weight: 600; border: 1px solid transparent; cursor: pointer; transition: background-color .15s, color .15s; text-decoration: none; }
+  .sv-btn-primary { background: #4338ca; color: #fff; } .sv-btn-primary:hover { background: #312e81; }
+  .sv-btn-secondary { border-color: #cbd5e1; background: #fff; color: #334155; } .sv-btn-secondary:hover { background: #f1f5f9; }
+  .sv-btn:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid #4f46e5; outline-offset: 2px; border-radius: .25rem; }
+  .sv-card { background: #fff; border: 1px solid #e2e8f0; border-radius: .75rem; padding: 1.5rem; box-shadow: 0 1px 2px rgba(15,23,42,.05); }
+  .sv-link { color: #4338ca; font-weight: 500; text-decoration: none; } .sv-link:hover { text-decoration: underline; }
+  .banner { background: #fff7ed; border-bottom: 1px solid #fdba74; color: #9a3412; padding: .55rem 1rem; font-size: .75rem; line-height: 1.45; text-align: center; }
+  .shell { max-width: 1200px; margin: 0 auto; padding: 1.5rem 1rem 3rem; display: flex; gap: 2rem; }
+  .sidebar { display: none; width: 15rem; flex: none; } .main { flex: 1; min-width: 0; }
+  .brand { display: flex; align-items: center; gap: .5rem; text-decoration: none; }
+  .brand-mark { display: flex; height: 2rem; width: 2rem; align-items: center; justify-content: center; border-radius: .5rem; background: #4338ca; color: #fff; font-size: .8125rem; font-weight: 700; }
+  .brand-name { font-size: 1.125rem; font-weight: 600; letter-spacing: -.01em; }
+  .topbar { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #e2e8f0; background: #fff; padding: .75rem 1rem; margin: -1.5rem -1rem 1.5rem; }
+  .nav ul { list-style: none; margin: 1rem 0; padding: 0; } .nav li + li { margin-top: .25rem; }
+  .nav a { display: block; border-radius: .5rem; padding: .5rem .75rem; font-size: .875rem; font-weight: 500; color: #334155; text-decoration: none; }
+  .nav a:hover { background: #f1f5f9; color: #0f172a; } .nav a[aria-current="page"] { background: #eef2ff; color: #3730a3; }
+  .user-block { border: 1px solid #e2e8f0; background: #f8fafc; border-radius: .5rem; padding: .75rem; }
+  .user-name { margin: 0; font-size: .875rem; font-weight: 600; color: #0f172a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .user-email { margin: .125rem 0 0; font-size: .75rem; color: #64748b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .user-role { display: inline-flex; margin-top: .375rem; border: 1px solid #cbd5e1; background: #fff; border-radius: 9999px; padding: .1rem .5rem; font-size: .7rem; font-weight: 500; color: #475569; }
+  .page-head { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: 1.5rem; }
+  .page-title { margin: 0; font-size: 1.5rem; font-weight: 600; letter-spacing: -.01em; color: #0f172a; }
+  .page-sub { margin: .25rem 0 0; font-size: .875rem; color: #475569; }
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+  .menu-btn { display: inline-flex; } .mobile-nav { display: none; border-top: 1px solid #e2e8f0; background: #fff; padding: .75rem 1rem; margin: -1.5rem -1rem 1.5rem; }
+  .mobile-nav.open { display: block; }
+  @media (min-width: 1024px) { .sidebar { display: block; } .topbar { display: none; } .mobile-nav { display: none !important; } .shell { padding: 1.5rem 2rem 3rem; } }
+  .grid-2 { display: grid; gap: 1.5rem; align-items: start; }
+  @media (min-width: 1024px) { .grid-2 { grid-template-columns: repeat(2, 1fr); } }
+  .stack { display: grid; gap: 1.5rem; }
+  .section-title { margin: 0; font-size: 1rem; font-weight: 600; color: #0f172a; }
+  .summary-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: .75rem; margin-top: .75rem; font-size: .875rem; }
+  .summary-grid > div { border: 1px solid #e2e8f0; border-radius: .5rem; padding: .75rem; }
+  .summary-grid dt { font-size: .75rem; color: #64748b; }
+  .summary-grid dd { margin: .15rem 0 0; font-weight: 600; color: #0f172a; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .stepper { display: flex; align-items: stretch; gap: .5rem; margin-top: .5rem; }
+  .stepper .sv-btn { padding-left: 1rem; padding-right: 1rem; }
+  .sv-input { display: block; width: 100%; border: 1px solid #cbd5e1; border-radius: .5rem; padding: .5rem .75rem; font-size: .875rem; color: #0f172a; background: #fff; text-align: center; }
+  .sv-label { display: block; margin-bottom: .25rem; font-size: .875rem; font-weight: 500; color: #334155; }
+  .field-hint { margin-top: .25rem; font-size: .75rem; color: #64748b; }
+  .field-error { margin-top: .25rem; font-size: .75rem; color: #b91c1c; }
+  .alert { display: flex; gap: .75rem; border: 1px solid; border-radius: .5rem; padding: 1rem; font-size: .875rem; }
+  .alert .ico { display: flex; height: 1.25rem; width: 1.25rem; flex: none; align-items: center; justify-content: center; border-radius: 9999px; border: 1px solid currentColor; font-size: .7rem; font-weight: 700; margin-top: .1rem; }
+  .alert-success { border-color: #6ee7b7; background: #ecfdf5; color: #065f46; }
+  .alert-info { border-color: #cbd5e1; background: #f8fafc; color: #334155; }
+  .alert p { margin: 0; }
+  .result-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: .75rem; margin-top: .75rem; font-size: .875rem; }
+  .result-grid > div { border: 1px solid #e2e8f0; border-radius: .5rem; padding: .75rem; }
+  .result-grid dt { font-size: .75rem; color: #64748b; }
+  .result-grid dd { margin: .15rem 0 0; font-weight: 600; color: #0f172a; }
+  .processing { display: flex; align-items: center; gap: .75rem; margin-top: 1rem; }
+  .spinner { width: 1rem; height: 1rem; animation: spin 1s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .skeleton { height: .75rem; border-radius: .25rem; background: #e2e8f0; animation: pulse 1.5s ease-in-out infinite; }
+  .skeleton + .skeleton { margin-top: .5rem; }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
+  .modal-backdrop { position: fixed; inset: 0; z-index: 50; display: flex; align-items: flex-end; justify-content: center; padding: 1rem; background: rgba(15,23,42,.5); }
+  @media (min-width: 640px) { .modal-backdrop { align-items: center; } }
+  .modal { position: relative; z-index: 10; width: 100%; max-width: 28rem; background: #fff; border: 1px solid #e2e8f0; border-radius: .75rem; padding: 1.5rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,.12); outline: none; }
+  .modal-title { margin: 0; font-size: 1.05rem; font-weight: 600; color: #0f172a; }
+  .modal-desc { margin: .25rem 0 0; font-size: .875rem; color: #475569; }
+  .modal-actions { display: flex; flex-direction: column-reverse; gap: .5rem; margin-top: 1.25rem; }
+  @media (min-width: 640px) { .modal-actions { flex-direction: row; justify-content: flex-end; } }
+  .actions-row { display: flex; flex-direction: column; gap: .75rem; margin-top: .75rem; }
+  .actions-row .sv-btn, .actions-row a.sv-btn { width: 100%; }
+  @media (min-width: 640px) { .actions-row { flex-direction: row; } .actions-row .sv-btn, .actions-row a.sv-btn { width: auto; } }
+  .footnote { margin: 1rem 0 0; font-size: .75rem; color: #94a3b8; }
+</style>
+
+</head>
+<body>
+<div class="banner">
+  <strong>STATIC OFFLINE PREVIEW — PAGE 7 (GENERATE + RESULTS)</strong> — the stepper, validation and confirmation modal are <strong>fully functional offline</strong>. In production, generation POSTs to /api/datasets/{id}/generate and the CSV downloads through an authenticated backend request (token never in a URL). Here, Start Generation demonstrates the UI flow with sample values and Download writes a real CSV built from the sample rows, fully offline.
+</div>
+
+<header class="topbar">
+  <a class="brand" href="Dashboard page .html"><span class="brand-mark">SV</span><span class="brand-name">SynthVault</span></a>
+  <button type="button" id="menuBtn" class="sv-btn sv-btn-secondary menu-btn" aria-expanded="false" aria-controls="mobileNav">
+    <span class="sr-only">Toggle navigation menu</span>
+    <svg viewBox="0 0 20 20" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M3 5h14v2H3V5Zm0 4h14v2H3V9Zm0 4h14v2H3v-2Z"/></svg>
+  </button>
+</header>
+<nav id="mobileNav" class="mobile-nav" aria-label="Application">
+  <ul class="nav" style="margin:0">
+    <li><a href="Dashboard page .html">Dashboard</a></li>
+    <li><a href="Projects Page .html">Projects</a></li>
+  </ul>
+</nav>
+
+<div class="shell">
+  <aside class="sidebar">
+    <div style="position:sticky;top:1.5rem">
+      <a class="brand" href="Dashboard page .html"><span class="brand-mark">SV</span><span class="brand-name">SynthVault</span></a>
+      <nav class="nav" aria-label="Application">
+        <ul>
+          <li><a href="Dashboard page .html">Dashboard</a></li>
+          <li><a href="Projects Page .html">Projects</a></li>
+        </ul>
+      </nav>
+      <div class="user-block">
+        <p class="user-name">Prathip Kumar</p>
+        <p class="user-email">prathip@example.com</p>
+        <span class="user-role">USER</span>
+        <button type="button" class="sv-btn sv-btn-secondary" style="margin-top:.75rem;width:100%;padding:.5rem;font-size:.75rem">Sign out</button>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main" id="main-content">
+    <div class="page-head">
+      <div>
+        <h1 class="page-title">Generate Synthetic Data</h1>
+        <p class="page-sub">Configure the row count, start the generation and download the result.</p>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="stack">
+        <section class="sv-card" aria-labelledby="summary-heading">
+          <h2 class="section-title" id="summary-heading">Dataset summary</h2>
+          <dl class="summary-grid">
+            <div><dt>Dataset</dt><dd>patients.csv</dd></div>
+            <div><dt>Status</dt><dd>PROCESSED</dd></div>
+            <div><dt>Rows</dt><dd style="font-size:1.125rem">5,000</dd></div>
+            <div><dt>Columns</dt><dd style="font-size:1.125rem">8</dd></div>
+          </dl>
+        </section>
+
+        <section class="sv-card" aria-labelledby="config-heading">
+          <h2 class="section-title" id="config-heading">Generation Configuration</h2>
+          <form id="genForm" novalidate>
+            <label class="sv-label" for="rowCount" style="margin-top:.75rem">Number of Synthetic Rows</label>
+            <div class="stepper">
+              <button type="button" id="minusBtn" class="sv-btn sv-btn-secondary" aria-label="Decrease row count by 1,000">&minus;</button>
+              <input id="rowCount" type="number" min="1" max="100000" step="1" value="1000" aria-required="true" />
+              <button type="button" id="plusBtn" class="sv-btn sv-btn-secondary" aria-label="Increase row count by 1,000">+</button>
+            </div>
+            <p id="rowHint" class="field-hint">Between 1 and 100,000 rows (backend limit).</p>
+            <p id="rowError" class="field-error" role="alert" style="display:none"></p>
+            <button type="submit" id="genBtn" class="sv-btn sv-btn-primary" style="margin-top:1.25rem;width:100%">Generate Synthetic Data</button>
+          </form>
+        </section>
+      </div>
+
+      <div class="stack">
+        <section class="sv-card" aria-labelledby="result-heading">
+          <h2 class="section-title" id="result-heading">Result</h2>
+          <p id="resultEmpty" style="margin-top:.75rem;border:1px dashed #cbd5e1;border-radius:.5rem;padding:1.5rem;text-align:center;font-size:.875rem;color:#475569">
+            Choose a row count and start the generation. The synthetic file keeps the statistical shape of your data while every personal value is replaced with a fabricated one.
+          </p>
+          <div id="processing" style="display:none" aria-live="polite">
+            <div class="processing">
+              <svg class="spinner" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="#4338ca" stroke-opacity=".25" stroke-width="4"/><path d="M21 12a9 9 0 0 0-9-9" stroke="#4338ca" stroke-width="4" stroke-linecap="round"/></svg>
+              <span style="font-size:.875rem;font-weight:500;color:#0f172a">Generation is processing...</span>
+            </div>
+            <div style="margin-top:1rem"><div class="skeleton" style="width:100%"></div><div class="skeleton" style="width:66%"></div></div>
+          </div>
+          <div id="resultPanel" style="display:none">
+            <div class="alert alert-success" style="margin-top:.75rem" role="status"><span class="ico" aria-hidden="true">✓</span><div><p style="font-weight:600">Synthetic Data Ready</p><p style="margin-top:.15rem">5,000 synthetic rows were generated.</p></div></div>
+            <dl class="result-grid">
+              <div><dt>Generated rows</dt><dd style="font-size:1.125rem">5,000</dd></div>
+              <div><dt>Created</dt><dd style="font-size:.875rem">20 Sep 2026, 11:02</dd></div>
+              <div><dt>Dataset ID</dt><dd style="font-size:.875rem">7</dd></div>
+              <div><dt>Synthetic dataset ID</dt><dd style="font-size:.875rem">3</dd></div>
+            </dl>
+            <div class="actions-row">
+              <button type="button" id="downloadBtn" class="sv-btn sv-btn-primary">Download Synthetic CSV</button>
+            </div>
+            <p class="footnote">In production the file downloads through an authenticated request — the access token is never part of the URL.</p>
+          </div>
+        </section>
+
+        <section class="sv-card" aria-labelledby="similarity-heading">
+          <h2 class="section-title" id="similarity-heading">Similarity Report</h2>
+          <div class="alert alert-info" style="margin-top:.75rem"><span class="ico" aria-hidden="true">i</span><div><p style="font-weight:600">Similarity verification is not available.</p><p style="margin-top:.15rem">The connected backend does not expose a similarity report endpoint (GET /api/reports/similarity/{id} is not implemented), so no similarity score or per-column metrics can be shown. The frontend never calculates similarity itself.</p></div></div>
+        </section>
+
+        <section class="sv-card" aria-labelledby="next-heading">
+          <h2 class="section-title" id="next-heading">Next actions</h2>
+          <div class="actions-row">
+            <a class="sv-btn sv-btn-secondary" href="Privacy Analysis page.Html">Back to Privacy Analysis</a>
+            <a class="sv-btn sv-btn-secondary" href="Projects Page .html">Back to Projects</a>
+          </div>
+        </section>
+      </div>
+
+    </div>
+
+    <p class="footnote">Static offline preview generated for visual verification · SynthVault MCA Project</p>
+  </main>
+</div>
+<div class="modal-backdrop" id="confirmBackdrop" style="display:none">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="confirmTitle" tabindex="-1" id="confirmModal">
+    <h2 class="modal-title" id="confirmTitle">Generate Synthetic Data?</h2>
+    <p class="modal-desc" id="confirmDesc">You are about to generate 1,000 synthetic records.</p>
+    <div class="modal-actions">
+      <button type="button" class="sv-btn sv-btn-secondary" id="confirmCancel">Cancel</button>
+      <button type="button" class="sv-btn sv-btn-primary" id="confirmStart">Start Generation</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var MIN = 1, MAX = 100000, STEP = 1000;
+  var input = document.getElementById('rowCount');
+  var hint = document.getElementById('rowHint');
+  var errorEl = document.getElementById('rowError');
+  var backdrop = document.getElementById('confirmBackdrop');
+  var modal = document.getElementById('confirmModal');
+  var confirmDesc = document.getElementById('confirmDesc');
+  var emptyEl = document.getElementById('resultEmpty');
+  var processing = document.getElementById('processing');
+  var resultPanel = document.getElementById('resultPanel');
+
+  function fmt(n) { return Number(n).toLocaleString(); }
+  function clamp(v) { return Math.min(MAX, Math.max(MIN, v)); }
+  function showError(msg) { errorEl.textContent = msg; errorEl.style.display = 'block'; hint.style.display = 'none'; }
+  function clearError() { errorEl.style.display = 'none'; hint.style.display = 'block'; }
+
+  document.getElementById('minusBtn').addEventListener('click', function () {
+    var current = Number(input.value); var base = isFinite(current) && current > 0 ? current : 1000;
+    input.value = String(clamp(base - STEP)); clearError();
+  });
+  document.getElementById('plusBtn').addEventListener('click', function () {
+    var current = Number(input.value); var base = isFinite(current) && current > 0 ? current : 1000;
+    input.value = String(clamp(base + STEP)); clearError();
+  });
+  input.addEventListener('input', clearError);
+
+  document.getElementById('genForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var n = Number(input.value);
+    if (!Number.isInteger(n) || n < MIN || n > MAX) {
+      showError('Row count must be a whole number between 1 and 100,000.');
+      return;
+    }
+    confirmDesc.textContent = 'You are about to generate ' + fmt(n) + ' synthetic records.';
+    backdrop.style.display = 'flex'; modal.focus();
+  });
+
+  function closeModal() { backdrop.style.display = 'none'; }
+  document.getElementById('confirmCancel').addEventListener('click', closeModal);
+  backdrop.addEventListener('mousedown', function (e) { if (e.target === backdrop) { closeModal(); } });
+
+  document.getElementById('confirmStart').addEventListener('click', function () {
+    closeModal();
+    emptyEl.style.display = 'none';
+    resultPanel.style.display = 'none';
+    processing.style.display = 'block';
+    /* The production app POSTs to /api/datasets/{id}/generate; this static
+       preview demonstrates the same UI flow with clearly-labelled sample
+       values, then reveals the result panel. */
+    window.setTimeout(function () {
+      processing.style.display = 'none';
+      resultPanel.style.display = 'block';
+      resultPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 1200);
+  });
+
+  /* Real offline CSV download built from the sample rows. */
+  document.getElementById('downloadBtn').addEventListener('click', function () {
+    var header = 'patient_id,email,phone,admitted_on,bill_amount';
+    var rows = [
+      'S1,aarav.s@example.com,+919700000001,2024-03-02,15,880.25',
+      'S2,diya.m@example.com,+919700000002,2024-06-17,7,240.00',
+      'S3,ishaan.k@example.com,+919700000003,2024-09-21,22,410.75'
+    ];
+    var csv = [header].concat(rows).join('\n');
+    var blob = new Blob([csv], { type: 'text/csv' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'synthetic-dataset-7.csv';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') {
+      if (backdrop.style.display === 'flex') { closeModal(); }
+      var nav = document.getElementById('mobileNav');
+      nav.classList.remove('open');
+      document.getElementById('menuBtn').setAttribute('aria-expanded', 'false');
+    }
+  });
+
+  /* Mobile nav */
+  var menuBtn = document.getElementById('menuBtn'), mobileNav = document.getElementById('mobileNav');
+  menuBtn.addEventListener('click', function () {
+    var open = mobileNav.classList.toggle('open');
+    menuBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+})();
+</script>
+
+</body>
+</html>
+

@@ -1,0 +1,39 @@
+# ============================================================================
+# SynthVault MCA - workspace root .gitignore (rewritten 2026-09-16 restructure)
+# ============================================================================
+
+# --- Environment / secrets ---
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+
+# --- OS / editor ---
+.DS_Store
+Thumbs.db
+.idea/
+*.iml
+.vscode/
+*.swp
+
+# --- Logs / temp ---
+*.log
+logs/
+*.hprof
+test-output/
+
+# --- Java / Maven build output ---
+*.class
+*.jar
+
+# --- Local-only tooling (portable MySQL runtime - never committed) ---
+tools/
+
+# --- Safety backups (local only, never submitted) ---
+_backup_*/
+
+# --- SynthVault MCA module (build output + runtime data; recreated by the app) ---
+synthvault-mca/target/
+synthvault-mca/uploads/
+synthvault-mca/synthetic/
