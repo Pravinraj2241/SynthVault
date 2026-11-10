@@ -120,6 +120,8 @@ SynthVault/
    ```
 4. The API starts on `http://localhost:8080`.
 
+> **ERR_CONNECTION_REFUSED fix (resolved):** If MySQL credentials in `application.properties` are incorrect (e.g., root user locked), the app will now start on port 8080 with a warning instead of crashing completely. See the "Database ready" message — if MySQL auth fails, the schema init gracefully logs a WARNING and the HTTP server still starts, allowing you to test API endpoints and fix credentials without restarting.
+
 > The `tools/mysql-portable/` folder (~550 MB) is **gitignored** and not part of the repository. Use `scripts/start-mysql.bat` if you want to run the bundled portable MySQL locally.
 
 ## 🌐 Frontend Setup (React + Vite + Tailwind)
@@ -146,7 +148,11 @@ The frontend calls the Spring Boot backend on `http://localhost:8080`. Make sure
 ## 📖 Documentation
 
 - `PROJECT_GUIDE.md` — complete implementation checklist, data contracts, API responses, enums, and smoke-test results (24 PASSED / 0 FAILED).
-- Each module folder contains its own `.gitignore` and `README.md` where applicable.
+- `ARCHITECTURE.md` — **system architecture and problem-solution documentation** (browser → React → Spring Boot → MySQL).
+- `docs/backend.md` — backend REST controllers, DAO layer, and services.
+- `docs/database-schema.md` — 7-table database schema with fields and constraints.
+- `docs/api-endpoints.md` — complete API endpoint reference (15 endpoints).
+
 
 ## 🔒 Security & Privacy
 
