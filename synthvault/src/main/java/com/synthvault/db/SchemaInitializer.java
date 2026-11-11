@@ -108,16 +108,22 @@ public class SchemaInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        boolean tablesReady = false;
         try (Connection con = db.get(); Statement st = con.createStatement()) {
             for (String sql : TABLE_SQL) {
                 st.execute(sql);
             }
+            tablesReady = true;
         } catch (Exception e) {
-            // Fail fast with a message a student can actually act on
-            System.out.println("[SynthVault] ERROR: cannot reach MySQL - check "
+            // Log the error but do not kill the app - the server still starts on port 8080
+            // so that endpoints can be tested once MySQL credentials are corrected.
+            System.out.println("[SynthVault] WARNING: cannot reach MySQL - check "
                     + "spring.datasource.url / username / password in application.properties");
-            throw e;
+            System.out.println("[SynthVault]   " + e.getMessage());
+            System.out.println("[SynthVault] API will start, but DB-dependent features will fail until MySQL is configured.");
         }
-        System.out.println("[SynthVault] Database ready - 7 tables verified/created.");
+        if (tablesReady) {
+            System.out.println("[SynthVault] Database ready - 7 tables verified/created.");
+        }
     }
 }
