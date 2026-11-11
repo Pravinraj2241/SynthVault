@@ -1,10 +1,31 @@
-target/
-uploads/
-synthetic/
+# SynthVault MCA - Backend .gitignore
+
+# --- Environment / secrets ---
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+
+# --- OS / editor ---
+.DS_Store
+Thumbs.db
 .idea/
 *.iml
 .vscode/
-.classpath
-.project
-.settings/
+*.swp
+
+# --- Logs / temp ---
 *.log
+logs/
+*.hprof
+test-output/
+
+# --- Java / Maven build output ---
+*.class
+*.jar
+target/
+
+# --- Local-only tooling / data (recreated by app) ---
+uploads/
+synthetic/
